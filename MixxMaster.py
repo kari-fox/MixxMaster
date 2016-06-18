@@ -1,7 +1,8 @@
-#Tkinter header
+#import and Tkinter header
 from Tkinter import *
 import time
 import threading
+import pickle
 win = Tk()
 win.wm_title("MixxMaster")
 
@@ -28,6 +29,8 @@ song_cost_display = Label(win, text = "Cost - 100")
 video_button = Button(win, text = "Get your own music video - +4 fans/sec", command = lambda: video_add())
 video_count = Label(win, text = "0")
 video_cost_display = Label(win, text = "Cost - 500")
+save_button = Button(win, text = "Save and Quit", command = lambda: save())
+load_button = Button(win, text = "Load Save State", command = lambda: load())
 
 #button click
 def click(lyrics):
@@ -86,6 +89,18 @@ def update_count():
     fans_display.update_idletasks()
     threading.Timer(1, update_count).start()
 
+#create save state
+def save():
+    fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'wb')
+    pickle.dump([fans, lyrics, jingle, song, video, jingle_cost, song_cost, video_cost], fileObject)
+    fileObject.close()
+
+#load save state
+def load():
+    fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'rb')
+    fans, lyrics, jingle, song, video, jingle_cost, song_cost, video_cost = pickle.load(fileObject)
+    fileObject.close()
+
 #tkinter arrangement
 big_button.grid(row = 1, column = 0)
 fans_label.grid(row = 2, column = 0)
@@ -99,6 +114,8 @@ song_count.grid(row = 3, column = 2)
 video_button.grid(row = 1, column = 3)
 video_cost_display.grid(row = 2, column = 3)
 video_count.grid(row = 3, column = 3)
+save_button.grid(row = 4, column = 0)
+load_button.grid(row = 4, column = 1)
 
 update_count() #starting update for fan count
 win.mainloop()
