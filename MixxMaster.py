@@ -98,8 +98,29 @@ def save():
 #load save state
 def load():
     fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'rb')
+    global fans
+    global lyrics
+    global jingle
+    global song
+    global video
+    global jingle_cost
+    global song_cost
+    global video_cost
     fans, lyrics, jingle, song, video, jingle_cost, song_cost, video_cost = pickle.load(fileObject)
     fileObject.close()
+    jingle_cost_display.configure(text = "Cost - "+str(jingle_cost))
+    jingle_cost_display.update_idletasks()
+    jingle_count.configure(text = str(jingle))
+    jingle_count.update_idletasks()
+    song_cost_display.configure(text = "Cost - "+str(song_cost))
+    song_cost_display.update_idletasks()
+    song_count.configure(text = str(song))
+    song_count.update_idletasks()
+    video_cost_display.configure(text = "Cost - "+str(video_cost))
+    video_cost_display.update_idletasks()
+    video_count.configure(text = str(video))
+    video_count.update_idletasks()
+    
 
 #tkinter arrangement
 big_button.grid(row = 1, column = 0)
