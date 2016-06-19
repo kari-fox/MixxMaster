@@ -13,7 +13,7 @@ data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost
 fans_label = Label(win, text = "Number of fans")
 fans_display = Label(win, text = "0")
 big_button = Button(win, text = "Write a lyric - +1 fans/click", command = lambda: click())
-jingle_button = Button(win, text = "Make a jingle - +0.1 fans/sec", command = lambda: building_add(data['fans'], data['jingle_cost'], data['jingle']))
+jingle_button = Button(win, text = "Make a jingle - +0.1 fans/sec", command = lambda: jingle_add())
 jingle_count = Label(win, text = "0")
 jingle_cost_display = Label(win, text = "Cost - 15")
 song_button = Button(win, text = "Finish a song - +0.5 fans/sec", command = lambda: song_add())
@@ -28,15 +28,15 @@ load_button = Button(win, text = "Load Save State", command = lambda: load())
 #button click
 def click():
     data['fans'] += data['lyrics']
-    update_displays()
+    fans_update_displays()
 
 #adding buildings
-def building_add(fans, cost, building):
-    if fans >= cost:
-        fans -= cost
-        cost = round(cost * (1.07**building, 1)
-        building += 1
-        update_displays()
+def jingle_add():
+    if data['fans'] >= data['jingle_cost']:
+        data['fans'] -= data['jingle_cost']
+        data['jingle_cost'] = round(data['jingle_cost'] * (1.07**data['jingle']), 1)
+        data['jingle'] += 1
+        jingle_update_displays()
 def song_add():
     if data['fans'] >= data['song_cost']:
         data['fans'] -= data['song_cost']
@@ -57,17 +57,20 @@ def update_count():
     threading.Timer(1, update_count).start()
     
 #update displays
-def update_displays():
+def fans_update_displays():
     fans_display.configure(text = str(data['fans']))
     fans_display.update_idletasks()
+def jingle_update_displays():
     jingle_cost_display.configure(text = "Cost - "+str(data['jingle_cost']))
     jingle_cost_display.update_idletasks()
     jingle_count.configure(text = str(data['jingle']))
     jingle_count.update_idletasks()
+def song_update_displays():
     song_cost_display.configure(text = "Cost - "+str(data['song_cost']))
     song_cost_display.update_idletasks()
     song_count.configure(text = str(data['song']))
     song_count.update_idletasks()
+def video_update_displays():
     video_cost_display.configure(text = "Cost - "+str(data['video_cost']))
     video_cost_display.update_idletasks()
     video_count.configure(text = str(data['video']))
