@@ -34,9 +34,10 @@ def click():
 def building_add(fans, cost, building):
     if fans >= cost:
         fans -= cost
-        cost = round(cost * (1.07**building, 1)
-        building += 1
+        building = building + 1
         update_displays()
+        cost = round(cost * (1.07**building, 1)
+        
 def song_add():
     if data['fans'] >= data['song_cost']:
         data['fans'] -= data['song_cost']
