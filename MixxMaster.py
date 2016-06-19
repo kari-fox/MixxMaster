@@ -36,8 +36,7 @@ load_button = Button(win, text = "Load Save State", command = lambda: load())
 def click(lyrics):
     global fans
     fans += lyrics
-    fans_display.configure(text = str(fans))
-    fans_display.update_idletasks()
+    fans_update_displays()
 
 #adding buildings
 def jingle_add():
@@ -48,10 +47,7 @@ def jingle_add():
         fans -= jingle_cost
         jingle_cost = round(jingle_cost * (1.07**jingle), 1)
         jingle += 1
-        jingle_cost_display.configure(text = "Cost - "+str(jingle_cost))
-        jingle_cost_display.update_idletasks()
-        jingle_count.configure(text = str(jingle))
-        jingle_count.update_idletasks()
+        jingle_update_displays()
 def song_add():
     global fans
     global song
@@ -60,10 +56,7 @@ def song_add():
         fans -= song_cost
         song_cost = round(song_cost * (1.07**song), 1)
         song += 1
-        song_cost_display.configure(text = "Cost - "+str(song_cost))
-        song_cost_display.update_idletasks()
-        song_count.configure(text = str(song))
-        song_count.update_idletasks()
+        song_update_displays()
 def video_add():
     global fans
     global video
@@ -72,12 +65,9 @@ def video_add():
         fans -= video_cost
         video_cost = round(video_cost * (1.07**video), 1)
         video += 1
-        video_cost_display.configure(text = "Cost - "+str(video_cost))
-        video_cost_display.update_idletasks()
-        video_count.configure(text = str(video))
-        video_count.update_idletasks()
+        video_update_displays()
         
-#update fan amount every second
+#update fan amount
 def update_count():
     global fans
     global jingle
@@ -85,9 +75,35 @@ def update_count():
     fans += (jingle * .1)
     fans += (song * .5)
     fans += (video * 4)
+    fans_update_displays()
+    threading.Timer(1, update_count).start()
+    
+#update displays
+def fans_update_displays():
+    global fans
     fans_display.configure(text = str(fans))
     fans_display.update_idletasks()
-    threading.Timer(1, update_count).start()
+def jingle_update_displays():
+    global jingle_cost
+    global jingle
+    jingle_cost_display.configure(text = "Cost - "+str(jingle_cost))
+    jingle_cost_display.update_idletasks()
+    jingle_count.configure(text = str(jingle))
+    jingle_count.update_idletasks()
+def song_update_displays():
+    global song_cost
+    global song
+    song_cost_display.configure(text = "Cost - "+str(song_cost))
+    song_cost_display.update_idletasks()
+    song_count.configure(text = str(song))
+    song_count.update_idletasks()
+def video_update_displays():
+    global video_cost
+    global video
+    video_cost_display.configure(text = "Cost - "+str(video_cost))
+    video_cost_display.update_idletasks()
+    video_count.configure(text = str(video))
+    video_count.update_idletasks()
 
 #create save state
 def save():
@@ -108,19 +124,10 @@ def load():
     global video_cost
     fans, lyrics, jingle, song, video, jingle_cost, song_cost, video_cost = pickle.load(fileObject)
     fileObject.close()
-    jingle_cost_display.configure(text = "Cost - "+str(jingle_cost))
-    jingle_cost_display.update_idletasks()
-    jingle_count.configure(text = str(jingle))
-    jingle_count.update_idletasks()
-    song_cost_display.configure(text = "Cost - "+str(song_cost))
-    song_cost_display.update_idletasks()
-    song_count.configure(text = str(song))
-    song_count.update_idletasks()
-    video_cost_display.configure(text = "Cost - "+str(video_cost))
-    video_cost_display.update_idletasks()
-    video_count.configure(text = str(video))
-    video_count.update_idletasks()
-    
+    fans_update_displays()
+    jingle_update_displays()
+    song_update_displays()
+    video_update_displays()
 
 #tkinter arrangement
 big_button.grid(row = 1, column = 0)
