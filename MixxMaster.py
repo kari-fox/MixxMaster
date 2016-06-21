@@ -18,59 +18,45 @@ data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost
 #tkinter elements
 fans_label = Label(win, text = "Number of fans")
 fans_display = Label(win, text = "0")
-big_button = Button(win, text = "Write a lyric - +1 fans/click", command = lambda: click(data['fans'], data['lyrics']))
-jingle_button = Button(win, text = "Make a jingle - +0.1 fans/sec", command = lambda: data['fans'], data['jingle_cost'], data['jingle'] = jingle_add(data['fans'], data['jingle_cost'], data['jingle']))
+big_button = Button(win, text = "Write a lyric - +1 fans/click", command = lambda: click())
+jingle_button = Button(win, text = "Make a jingle - +0.1 fans/sec", command = lambda: add_to_target('fans', 'jingle_cost', 'jingle'))
 jingle_count = Label(win, text = "0")
 jingle_cost_display = Label(win, text = "Cost - 15")
-song_button = Button(win, text = "Finish a song - +0.5 fans/sec", command = lambda: song_add())
+song_button = Button(win, text = "Finish a song - +0.5 fans/sec", command = lambda: add_to_target('fans', 'song_cost', 'song'))
 song_count = Label(win, text = "0")
 song_cost_display = Label(win, text = "Cost - 100")
-video_button = Button(win, text = "Get your own music video - +4 fans/sec", command = lambda: video_add())
+video_button = Button(win, text = "Get your own music video - +4 fans/sec", command = lambda: add_to_target('fans', 'video_cost', 'video'))
 video_count = Label(win, text = "0")
 video_cost_display = Label(win, text = "Cost - 500")
-album_button = Button(win, text = "Drop an album - +10 fans/sec", command = lambda: album_add())
+album_button = Button(win, text = "Drop an album - +10 fans/sec", command = lambda: add_to_target('fans', 'album_cost', 'album'))
 album_count = Label(win, text = "0")
 album_cost_display = Label(win, text = "Cost - 3,000")
 save_button = Button(win, text = "Save and Quit", command = lambda: save())
 load_button = Button(win, text = "Load Save State", command = lambda: load())
 
 #button click
-def click(fans, lyrics):
-    fans += lyrics
-    data['fans'] = fans
+def click():
+    data['fans'] += data['lyrics']
     update_displays()
     
 #adding buildings
-def jingle_add(fans, cost, building):
+def building_add(fans, cost, building):
     if fans >= cost:
         fans -= cost
-        cost = round(cost * (1.07**building), 1)
         building += 1
+        cost = round(cost * (1.07**building), 1)
         return fans, cost, building
-def song_add():
-    if data['fans'] >= data['song_cost']:
-        data['fans'] -= data['song_cost']
-        data['song_cost'] = round(data['song_cost'] * (1.07**data['song']), 1)
-        data['song'] += 1
-        update_displays()
-def video_add():
-    if data['fans'] >= data['video_cost']:
-        data['fans'] -= data['video_cost']
-        data['video_cost'] = round(data['video_cost'] * (1.07**data['video']), 1)
-        data['video'] += 1
-        update_displays()
-def album_add():
-    if data['fans'] >= data['album_cost']:
-        data['fans'] -= data['album_cost']
-        data['album_cost'] = round(data['album_cost'] * (1.07**data['album']), 1)
-        data['album'] += 1
-        update_displays()
+def add_to_target(k1, k2, k3):
+    data[k1], data[k2], data[k3] = building_add(data[k1], data[k2], data[k3])
+    update_displays()
         
 #update fan amount
 def update_count():
+    global t
     data['fans'] = (data['jingle'] * data['jingle_gain']) + (data['song'] * data['song_gain']) + (data['video'] * data['video_gain']) + (data['album'] * data['album_gain']) + data['fans']
     update_displays()
-    threading.Timer(1, update_count).start()
+    t = threading.Timer(1, update_count)
+    t.start()
     
 #update displays
 def update_displays():
@@ -86,6 +72,7 @@ def update_displays():
 
 #save and quit
 def save():
+    t.cancel()
     fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'wb')
     pickle.dump(data, fileObject)
     fileObject.close()
