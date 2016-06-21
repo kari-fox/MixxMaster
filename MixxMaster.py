@@ -13,7 +13,7 @@ background_label = Label(win, image = bg)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
 #initializing variables
-data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500}
+data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500, 'album': 0, 'album_cost': 3000}
 
 #tkinter elements
 fans_label = Label(win, text = "Number of fans")
@@ -28,13 +28,16 @@ song_cost_display = Label(win, text = "Cost - 100")
 video_button = Button(win, text = "Get your own music video - +4 fans/sec", command = lambda: video_add())
 video_count = Label(win, text = "0")
 video_cost_display = Label(win, text = "Cost - 500")
+album_button = Button(win, text = "Drop an album - +10 fans/sec", command = lambda: album_add())
+album_count = Label(win, text = "0")
+album_cost_display = Label(win, text = "Cost - 3,000")
 save_button = Button(win, text = "Save and Quit", command = lambda: save())
 load_button = Button(win, text = "Load Save State", command = lambda: load())
 
 #button click
 def click():
     data['fans'] += data['lyrics']
-    fans_update_displays()
+    update_displays()
 
 #adding buildings
 def jingle_add():
@@ -42,45 +45,43 @@ def jingle_add():
         data['fans'] -= data['jingle_cost']
         data['jingle_cost'] = round(data['jingle_cost'] * (1.07**data['jingle']), 1)
         data['jingle'] += 1
-        jingle_update_displays()
+        update_displays()
 def song_add():
     if data['fans'] >= data['song_cost']:
         data['fans'] -= data['song_cost']
         data['song_cost'] = round(data['song_cost'] * (1.07**data['song']), 1)
         data['song'] += 1
-        song_update_displays()
+        update_displays()
 def video_add():
     if data['fans'] >= data['video_cost']:
         data['fans'] -= data['video_cost']
         data['video_cost'] = round(data['video_cost'] * (1.07**data['video']), 1)
         data['video'] += 1
-        video_update_displays()
+        update_displays()
+def album_add():
+    if data['fans'] >= data['album_cost']:
+        data['fans'] -= data['album_cost']
+        data['album_cost'] = round(data['album_cost'] * (1.07**data['album']), 1)
+        data['album'] += 1
+        update_displays()
         
 #update fan amount
 def update_count():
-    data['fans'] = (data['jingle'] * .1) + (data['song'] * .5) + (data['video'] * 4) + data['fans']
-    fans_update_displays()
+    data['fans'] = (data['jingle'] * .1) + (data['song'] * .5) + (data['video'] * 4) + (data['album'] * 10) + data['fans']
+    update_displays()
     threading.Timer(1, update_count).start()
     
 #update displays
-def fans_update_displays():
+def update_displays():
     fans_display.configure(text = str(data['fans']))
-    fans_display.update_idletasks()
-def jingle_update_displays():
     jingle_cost_display.configure(text = "Cost - "+str(data['jingle_cost']))
-    jingle_cost_display.update_idletasks()
     jingle_count.configure(text = str(data['jingle']))
-    jingle_count.update_idletasks()
-def song_update_displays():
     song_cost_display.configure(text = "Cost - "+str(data['song_cost']))
-    song_cost_display.update_idletasks()
     song_count.configure(text = str(data['song']))
-    song_count.update_idletasks()
-def video_update_displays():
     video_cost_display.configure(text = "Cost - "+str(data['video_cost']))
-    video_cost_display.update_idletasks()
     video_count.configure(text = str(data['video']))
-    video_count.update_idletasks()
+    album_cost_display.configure(text = "Cost - "+str(data['album_cost']))
+    album_count.configure(text = str(data['album']))
 
 #save and quit
 def save():
@@ -94,10 +95,7 @@ def load():
     fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'rb')
     data.update(pickle.load(fileObject))
     fileObject.close()
-    fans_update_displays()
-    jingle_update_displays()
-    song_update_displays()
-    video_update_displays()
+    update_displays()
 
 #tkinter window build
 big_button.grid(row = 1, column = 0)
@@ -112,6 +110,9 @@ song_count.grid(row = 3, column = 2)
 video_button.grid(row = 1, column = 3)
 video_cost_display.grid(row = 2, column = 3)
 video_count.grid(row = 3, column = 3)
+album_button.grid(row = 1, column = 4)
+album_cost_display.grid(row = 2, column = 4)
+album_count.grid(row = 3, column = 4)
 save_button.grid(row = 4, column = 0)
 load_button.grid(row = 4, column = 1)
 
