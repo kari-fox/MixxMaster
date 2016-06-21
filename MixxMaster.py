@@ -7,19 +7,12 @@ win = Tk()
 win.wm_title("MixxMaster")
 
 #initializing variables
-fans = 0
-lyrics = 1
-jingle = 0
-song = 0
-video = 0
-jingle_cost = 15
-song_cost = 100
-video_cost = 500
+data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500}
 
 #tkinter elements
 fans_label = Label(win, text = "Number of fans")
 fans_display = Label(win, text = "0")
-big_button = Button(win, text = "Write a lyric - +1 fans/click", command = lambda: click(lyrics))
+big_button = Button(win, text = "Write a lyric - +1 fans/click", command = lambda: click())
 jingle_button = Button(win, text = "Make a jingle - +0.1 fans/sec", command = lambda: jingle_add())
 jingle_count = Label(win, text = "0")
 jingle_cost_display = Label(win, text = "Cost - 15")
@@ -33,96 +26,67 @@ save_button = Button(win, text = "Save and Quit", command = lambda: save())
 load_button = Button(win, text = "Load Save State", command = lambda: load())
 
 #button click
-def click(lyrics):
-    global fans
-    fans += lyrics
+def click():
+    data['fans'] += data['lyrics']
     fans_update_displays()
 
 #adding buildings
 def jingle_add():
-    global fans
-    global jingle
-    global jingle_cost
-    if fans >= jingle_cost:
-        fans -= jingle_cost
-        jingle_cost = round(jingle_cost * (1.07**jingle), 1)
-        jingle += 1
+    if data['fans'] >= data['jingle_cost']:
+        data['fans'] -= data['jingle_cost']
+        data['jingle_cost'] = round(data['jingle_cost'] * (1.07**data['jingle']), 1)
+        data['jingle'] += 1
         jingle_update_displays()
 def song_add():
-    global fans
-    global song
-    global song_cost
-    if fans >= song_cost:
-        fans -= song_cost
-        song_cost = round(song_cost * (1.07**song), 1)
-        song += 1
+    if data['fans'] >= data['song_cost']:
+        data['fans'] -= data['song_cost']
+        data['song_cost'] = round(data['song_cost'] * (1.07**data['song']), 1)
+        data['song'] += 1
         song_update_displays()
 def video_add():
-    global fans
-    global video
-    global video_cost
-    if fans >= video_cost:
-        fans -= video_cost
-        video_cost = round(video_cost * (1.07**video), 1)
-        video += 1
+    if data['fans'] >= data['video_cost']:
+        data['fans'] -= data['video_cost']
+        data['video_cost'] = round(data['video_cost'] * (1.07**data['video']), 1)
+        data['video'] += 1
         video_update_displays()
         
 #update fan amount
 def update_count():
-    global fans
-    global jingle
-    global song
-    fans += (jingle * .1)
-    fans += (song * .5)
-    fans += (video * 4)
+    data['fans'] = (data['jingle'] * .1) + (data['song'] * .5) + (data['video'] * 4) + data['fans']
     fans_update_displays()
     threading.Timer(1, update_count).start()
     
 #update displays
 def fans_update_displays():
-    global fans
-    fans_display.configure(text = str(fans))
+    fans_display.configure(text = str(data['fans']))
     fans_display.update_idletasks()
 def jingle_update_displays():
-    global jingle_cost
-    global jingle
-    jingle_cost_display.configure(text = "Cost - "+str(jingle_cost))
+    jingle_cost_display.configure(text = "Cost - "+str(data['jingle_cost']))
     jingle_cost_display.update_idletasks()
-    jingle_count.configure(text = str(jingle))
+    jingle_count.configure(text = str(data['jingle']))
     jingle_count.update_idletasks()
 def song_update_displays():
-    global song_cost
-    global song
-    song_cost_display.configure(text = "Cost - "+str(song_cost))
+    song_cost_display.configure(text = "Cost - "+str(data['song_cost']))
     song_cost_display.update_idletasks()
-    song_count.configure(text = str(song))
+    song_count.configure(text = str(data['song']))
     song_count.update_idletasks()
 def video_update_displays():
-    global video_cost
-    global video
-    video_cost_display.configure(text = "Cost - "+str(video_cost))
+    video_cost_display.configure(text = "Cost - "+str(data['video_cost']))
     video_cost_display.update_idletasks()
-    video_count.configure(text = str(video))
+    video_count.configure(text = str(data['video']))
     video_count.update_idletasks()
 
 #create save state
 def save():
     fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'wb')
-    pickle.dump([fans, lyrics, jingle, song, video, jingle_cost, song_cost, video_cost], fileObject)
+    pickle.dump(data, fileObject)
     fileObject.close()
+    win.destroy()
 
 #load save state
 def load():
     fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'rb')
-    global fans
-    global lyrics
-    global jingle
-    global song
-    global video
-    global jingle_cost
-    global song_cost
-    global video_cost
-    fans, lyrics, jingle, song, video, jingle_cost, song_cost, video_cost = pickle.load(fileObject)
+    data.update(pickle.load(fileObject))
     fileObject.close()
     fans_update_displays()
     jingle_update_displays()
