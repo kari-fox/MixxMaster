@@ -86,7 +86,7 @@ def save():
 #load save state
 def load():
     fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'rb')
-    data = pickle.load(fileObject)
+    data.update(pickle.load(fileObject))
     fileObject.close()
     fans_update_displays()
     jingle_update_displays()
