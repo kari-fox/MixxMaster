@@ -5,6 +5,9 @@ import threading
 import pickle
 win = Tk()
 win.wm_title("MixxMaster")
+bg = PhotoImage(file = "/Users/kariselph/Desktop/MixxMaster/images/bg.gif")
+background_label = Label(win, image = bg)
+background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
 #initializing variables
 data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500}
@@ -76,7 +79,7 @@ def video_update_displays():
     video_count.configure(text = str(data['video']))
     video_count.update_idletasks()
 
-#create save state
+#save and quit
 def save():
     fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'wb')
     pickle.dump(data, fileObject)
