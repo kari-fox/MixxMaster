@@ -81,6 +81,7 @@ def save():
     fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'wb')
     pickle.dump(data, fileObject)
     fileObject.close()
+    win.destroy()
 
 #load save state
 def load():
