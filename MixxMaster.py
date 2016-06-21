@@ -6,6 +6,9 @@ import pickle
 win = Tk()
 win.wm_title("MixxMaster")
 bg = PhotoImage(file = "/Users/kariselph/Desktop/MixxMaster/images/bg.gif")
+w = bg.width()
+h = bg.height()
+win.geometry('%dx%d+0+0' % (w,h))
 background_label = Label(win, image = bg)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -96,7 +99,7 @@ def load():
     song_update_displays()
     video_update_displays()
 
-#tkinter arrangement
+#tkinter window build
 big_button.grid(row = 1, column = 0)
 fans_label.grid(row = 2, column = 0)
 fans_display.grid(row = 3, column = 0)
