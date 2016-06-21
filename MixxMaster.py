@@ -13,13 +13,13 @@ background_label = Label(win, image = bg)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
 #initializing variables
-data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500, 'album': 0, 'album_cost': 3000}
+data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500, 'album': 0, 'album_cost': 3000, 'jingle_gain': .1, 'song_gain': .5, 'video_gain': 4, 'album_gain': 10}
 
 #tkinter elements
 fans_label = Label(win, text = "Number of fans")
 fans_display = Label(win, text = "0")
-big_button = Button(win, text = "Write a lyric - +1 fans/click", command = lambda: click())
-jingle_button = Button(win, text = "Make a jingle - +0.1 fans/sec", command = lambda: jingle_add())
+big_button = Button(win, text = "Write a lyric - +1 fans/click", command = lambda: click(data['fans'], data['lyrics']))
+jingle_button = Button(win, text = "Make a jingle - +0.1 fans/sec", command = lambda: data['fans'], data['jingle_cost'], data['jingle'] = jingle_add(data['fans'], data['jingle_cost'], data['jingle']))
 jingle_count = Label(win, text = "0")
 jingle_cost_display = Label(win, text = "Cost - 15")
 song_button = Button(win, text = "Finish a song - +0.5 fans/sec", command = lambda: song_add())
@@ -35,17 +35,18 @@ save_button = Button(win, text = "Save and Quit", command = lambda: save())
 load_button = Button(win, text = "Load Save State", command = lambda: load())
 
 #button click
-def click():
-    data['fans'] += data['lyrics']
+def click(fans, lyrics):
+    fans += lyrics
+    data['fans'] = fans
     update_displays()
-
+    
 #adding buildings
-def jingle_add():
-    if data['fans'] >= data['jingle_cost']:
-        data['fans'] -= data['jingle_cost']
-        data['jingle_cost'] = round(data['jingle_cost'] * (1.07**data['jingle']), 1)
-        data['jingle'] += 1
-        update_displays()
+def jingle_add(fans, cost, building):
+    if fans >= cost:
+        fans -= cost
+        cost = round(cost * (1.07**building), 1)
+        building += 1
+        return fans, cost, building
 def song_add():
     if data['fans'] >= data['song_cost']:
         data['fans'] -= data['song_cost']
@@ -67,7 +68,7 @@ def album_add():
         
 #update fan amount
 def update_count():
-    data['fans'] = (data['jingle'] * .1) + (data['song'] * .5) + (data['video'] * 4) + (data['album'] * 10) + data['fans']
+    data['fans'] = (data['jingle'] * data['jingle_gain']) + (data['song'] * data['song_gain']) + (data['video'] * data['video_gain']) + (data['album'] * data['album_gain']) + data['fans']
     update_displays()
     threading.Timer(1, update_count).start()
     
