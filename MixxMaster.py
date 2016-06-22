@@ -15,7 +15,7 @@ background_label = Label(win, image = bg)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
 #initializing variables
-data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500, 'album': 0, 'album_cost': 3000, 'jingle_gain': .1, 'song_gain': .5, 'video_gain': 4, 'album_gain': 10}
+data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500, 'album': 0, 'album_cost': 3000, 'jingle_gain': .1, 'song_gain': .5, 'video_gain': 4, 'album_gain': 10, 'gig': 0, 'gig_cost': 10000, 'gig_gain': 40}
 
 #tkinter elements
 fans_label = Label(win, text = "Number of fans")
@@ -33,6 +33,9 @@ video_cost_display = Label(win, text = "Cost - 500")
 album_button = Button(win, text = "Drop an album - +10 fans/sec", command = lambda: add_to_target('fans', 'album_cost', 'album'))
 album_count = Label(win, text = "0")
 album_cost_display = Label(win, text = "Cost - 3,000")
+gig_button = Button(win, text = "Get a gig - +40 fans/sec", command = lambda: add_to_target('fans', 'gig_cost', 'gig'))
+gig_count = Label(win, text = "0")
+gig_cost_display = Label(win, text = "Cost - 10,000")
 save_button = Button(win, text = "Save and Quit", command = lambda: quit())
 load_button = Button(win, text = "Load Save State", command = lambda: load())
 info_label = Label(win, text = '')
@@ -75,6 +78,8 @@ def update_displays():
     video_count.configure(text = str(data['video']))
     album_cost_display.configure(text = "Cost - "+str(data['album_cost']))
     album_count.configure(text = str(data['album']))
+    gig_cost_display.configure(text = "Cost - "+str(data['gig_cost']))
+    gig_count.configure(text = str(data['gig']))
 
 #save and quit
 def save():
@@ -118,12 +123,15 @@ song_count.grid(row = 3, column = 2)
 video_button.grid(row = 1, column = 3)
 video_cost_display.grid(row = 2, column = 3)
 video_count.grid(row = 3, column = 3)
-album_button.grid(row = 1, column = 4)
-album_cost_display.grid(row = 2, column = 4)
-album_count.grid(row = 3, column = 4)
-save_button.grid(row = 4, column = 0)
-load_button.grid(row = 4, column = 1)
-info_label.grid(row = 4, column = 2)
+album_button.grid(row = 4, column = 0)
+album_cost_display.grid(row = 5, column = 0)
+album_count.grid(row = 6, column = 0)
+gig_button.grid(row = 4, column = 1)
+gig_cost_display.grid(row = 5, column = 1)
+gig_count.grid(row = 6, column = 1)
+save_button.grid(row = 7, column = 0)
+load_button.grid(row = 7, column = 1)
+info_label.grid(row = 7, column = 2)
 
 update_count() #starting update for fan count
 win.mainloop()
