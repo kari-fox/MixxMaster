@@ -3,9 +3,11 @@ from Tkinter import *
 import time
 import threading
 import pickle
+import os
+bg_image = os.path.join('images', 'bg.gif')
 win = Tk()
 win.wm_title("MixxMaster")
-bg = PhotoImage(file = "/Users/kariselph/Desktop/MixxMaster/images/bg.gif")
+bg = PhotoImage(file = bg_image)
 w = bg.width()
 h = bg.height()
 win.geometry('%dx%d+0+0' % (w,h))
@@ -73,14 +75,14 @@ def update_displays():
 #save and quit
 def save():
     t.cancel()
-    fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'wb')
+    fileObject = open('savefile.dat', 'wb')
     pickle.dump(data, fileObject)
     fileObject.close()
     win.destroy()
 
 #load save state
 def load():
-    fileObject = open('/Users/kariselph/Desktop/MixxMaster/savefile.dat', 'rb')
+    fileObject = open('savefile.dat', 'rb')
     data.update(pickle.load(fileObject))
     fileObject.close()
     update_displays()
