@@ -33,8 +33,9 @@ video_cost_display = Label(win, text = "Cost - 500")
 album_button = Button(win, text = "Drop an album - +10 fans/sec", command = lambda: add_to_target('fans', 'album_cost', 'album'))
 album_count = Label(win, text = "0")
 album_cost_display = Label(win, text = "Cost - 3,000")
-save_button = Button(win, text = "Save and Quit", command = lambda: save())
+save_button = Button(win, text = "Save and Quit", command = lambda: quit())
 load_button = Button(win, text = "Load Save State", command = lambda: load())
+info_label = Label(win, text = '')
 
 #button click
 def click():
@@ -48,17 +49,20 @@ def building_add(fans, cost, building):
         building += 1
         cost = round(cost * (1.07**building), 1)
         return fans, cost, building
+    else:
+        info_label.configure(text = 'Need more fans!')
+        return fans, cost, building
 def add_to_target(k1, k2, k3):
     data[k1], data[k2], data[k3] = building_add(data[k1], data[k2], data[k3])
     update_displays()
         
 #update fan amount
 def update_count():
-    global t
+    global count_timer
     data['fans'] = (data['jingle'] * data['jingle_gain']) + (data['song'] * data['song_gain']) + (data['video'] * data['video_gain']) + (data['album'] * data['album_gain']) + data['fans']
     update_displays()
-    t = threading.Timer(1, update_count)
-    t.start()
+    count_timer = threading.Timer(1, update_count)
+    count_timer.start()
     
 #update displays
 def update_displays():
@@ -74,18 +78,32 @@ def update_displays():
 
 #save and quit
 def save():
-    t.cancel()
     fileObject = open('savefile.dat', 'wb')
     pickle.dump(data, fileObject)
     fileObject.close()
-    win.destroy()
 
+def quit():
+    count_timer.cancel()
+    save_timer.cancel()
+    save()
+    win.destroy()
+    
+def autosave():
+    info_label.configure(text = 'Saving...')
+    global save_timer
+    save()
+    time.sleep(5)
+    info_label.configure(text = '')
+    save_timer = threading.Timer(30, autosave)
+    save_timer.start()
+    
 #load save state
 def load():
     fileObject = open('savefile.dat', 'rb')
     data.update(pickle.load(fileObject))
     fileObject.close()
     update_displays()
+    autosave()
 
 #tkinter window build
 big_button.grid(row = 1, column = 0)
@@ -105,6 +123,7 @@ album_cost_display.grid(row = 2, column = 4)
 album_count.grid(row = 3, column = 4)
 save_button.grid(row = 4, column = 0)
 load_button.grid(row = 4, column = 1)
+info_label.grid(row = 4, column = 2)
 
 update_count() #starting update for fan count
 win.mainloop()
