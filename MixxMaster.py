@@ -5,6 +5,7 @@ import threading
 import pickle
 import os
 bg_image = os.path.join('images', 'bg.gif')
+header_image = os.path.join('images', 'header.gif')
 win = Tk()
 win.wm_title("MixxMaster")
 bg = PhotoImage(file = bg_image)
@@ -14,12 +15,14 @@ win.geometry('%dx%d+0+0' % (w,h))
 background_label = Label(win, image = bg)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 bgcolor = '#10111E'
+header = PhotoImage(file = header_image)
 
 #initializing variables
 data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500, 'album': 0, 'album_cost': 3000, 'jingle_gain': .1, 'song_gain': .5, 'video_gain': 4, 'album_gain': 10, 'gig': 0, 'gig_cost': 10000, 'gig_gain': 40}
 
 #header elements
 header_frame = Frame(win, height = 250)
+header_label = Label(header_frame, image = header)
 
 #lyrics elements
 fans_label = Label(win, text = "Number of fans", bg = bgcolor, fg = 'white')
@@ -136,7 +139,7 @@ def load():
 win.grid_columnconfigure(0, weight=1, uniform="fred")
 win.grid_columnconfigure(1, weight=1, uniform="fred")
 win.grid_columnconfigure(2, weight=1, uniform="fred")
-header_frame.grid(row = 0 , column = 0)
+header_frame.grid(row = 0 , column = 0, columnspan = 3, sticky = W, pady = (0, 195))
 big_button.grid(row = 1, column = 0)
 fans_label.grid(row = 1, column = 1)
 fans_display.grid(row = 1, column = 2)
@@ -149,6 +152,7 @@ save_button.grid(row = 4, column = 0)
 load_button.grid(row = 4, column = 1)
 info_label.grid(row = 4, column = 2)
 #inside frames
+header_label.grid(row = 0, column = 0)
 jingle_button.grid(row = 0, column = 0)
 jingle_cost_display.grid(row = 1, column = 0)
 jingle_count.grid(row = 2, column = 0)

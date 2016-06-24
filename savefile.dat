@@ -1,7 +1,7 @@
 (dp0
 S'jingle_cost'
 p1
-F1492.8
+F3597.4
 sS'jingle_gain'
 p2
 F0.1
@@ -31,13 +31,13 @@ p10
 I2
 sS'fans'
 p11
-F5255.900000000044
+F6609.100000000042
 sS'song_cost'
 p12
 F9959.9
 sS'jingle'
 p13
-I12
+I13
 sS'song'
 p14
 I12
