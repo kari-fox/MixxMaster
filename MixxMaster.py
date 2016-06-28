@@ -4,6 +4,7 @@ import time
 import threading
 import pickle
 import os
+import math
 bg_image = os.path.join('images', 'bg.gif')
 header_image = os.path.join('images', 'header.gif')
 win = Tk()
@@ -18,7 +19,7 @@ bgcolor = '#10111E'
 header = PhotoImage(file = header_image)
 
 #initializing variables
-data = {'fans': 0, 'jingle': 0, 'song': 0, 'video': 0, 'album': 0, 'gig': 0, 'festival': 0, 'headliner': 0, 'tour': 0, 'lyrics': 1, 'lyrics_upgrade_cost': 50, 'jingle_cost': 15, 'jingle_gain': .1, 'jingle_upgrade_cost': 100, 'song_cost': 100, 'song_gain': 1, 'song_upgrade_cost': 1000, 'video_cost': 1100, 'video_gain': 8, 'video_upgrade_cost': 11000, 'album_cost': 12000, 'album_gain': 47, 'album_upgrade_cost': 120000, 'gig_cost': 130000, 'gig_gain': 260, 'gig_upgrade_cost': 1300000, 'festival_cost': 1400000, 'festival_gain': 1400, 'festival_upgrade_cost': 14000000, 'headliner_cost': 20000000, 'headliner_gain': 7800, 'headliner_upgrade_cost': 200000000, 'tour_cost': 330000000, 'tour_gain': 44000, 'tour_upgrade_cost': 3300000000}
+data = {'fans': 0, 'fans_per_sec': 0, 'jingle': 0, 'song': 0, 'video': 0, 'album': 0, 'gig': 0, 'festival': 0, 'headliner': 0, 'tour': 0, 'lyrics': 1, 'lyrics_upgrade_cost': 50, 'jingle_cost': 15, 'jingle_gain': .1, 'jingle_upgrade_cost': 100, 'song_cost': 100, 'song_gain': 1, 'song_upgrade_cost': 1000, 'video_cost': 1100, 'video_gain': 8, 'video_upgrade_cost': 11000, 'album_cost': 12000, 'album_gain': 47, 'album_upgrade_cost': 120000, 'gig_cost': 130000, 'gig_gain': 260, 'gig_upgrade_cost': 1300000, 'festival_cost': 1400000, 'festival_gain': 1400, 'festival_upgrade_cost': 14000000, 'headliner_cost': 20000000, 'headliner_gain': 7800, 'headliner_upgrade_cost': 200000000, 'tour_cost': 330000000, 'tour_gain': 44000, 'tour_upgrade_cost': 3300000000, 'multiplier': 1, 'forever_fans': 0, 'prestige': 0}
 
 #header elements
 header_frame = Frame(win)
@@ -27,6 +28,7 @@ header_label = Label(header_frame, image = header)
 #lyrics elements
 lyrics_frame = Frame(win, bg = bgcolor)
 fans_display = Label(win, text = "0 fans", bg = bgcolor, fg = 'white', font = ('Helvetica', 30))
+fans_per_sec_display = Label(lyrics_frame, text = '0 total fans/sec', bg = bgcolor, fg = 'white')
 big_button = Button(lyrics_frame, text = "Write a lyric", highlightbackground = bgcolor, command = lambda: click())
 lyrics_upgrade_button = Button(lyrics_frame, text = "Double your lyrics' output", highlightbackground = bgcolor, command = lambda: upgrade_target('fans', 'lyrics', 'lyrics_upgrade_cost', 'lyrics'))
 lyrics_gain_label = Label(lyrics_frame, text = '+1 fans/click', bg = bgcolor, fg = 'white')
@@ -89,7 +91,7 @@ festival_upgrade_cost_label = Label(festival_frame, text = 'Cost: 14,000,000', b
 #headliner elements
 headliner_frame = Frame(win, bg = bgcolor)
 headliner_button = Button(headliner_frame, text = "Headline a concert", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'headliner_cost', 'headliner'))
-headliner_count = Label(festival_frame, text = "Owned: 0", bg = bgcolor, fg = 'white')
+headliner_count = Label(headliner_frame, text = "Owned: 0", bg = bgcolor, fg = 'white')
 headliner_cost_display = Label(headliner_frame, text = "Cost: 20,000,000", bg = bgcolor, fg = 'white')
 headliner_upgrade_button = Button(headliner_frame, text = "Double your headliners' output", highlightbackground = bgcolor, command = lambda: upgrade_target('fans', 'headliner_gain', 'headliner_upgrade_cost', 'headliner'))
 headliner_gain_label = Label(headliner_frame, text = '+7,800 fans/sec', bg = bgcolor, fg = 'white')
@@ -98,7 +100,7 @@ headliner_upgrade_cost_label = Label(headliner_frame, text = 'Cost: 200,000,000'
 #tour elements
 tour_frame = Frame(win, bg = bgcolor)
 tour_button = Button(tour_frame, text = "Go on a concert tour", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'tour_cost', 'tour'))
-tour_count = Label(festival_frame, text = "Owned: 0", bg = bgcolor, fg = 'white')
+tour_count = Label(tour_frame, text = "Owned: 0", bg = bgcolor, fg = 'white')
 tour_cost_display = Label(tour_frame, text = "Cost: 330,000,000", bg = bgcolor, fg = 'white')
 tour_upgrade_button = Button(tour_frame, text = "Double your tours' output", highlightbackground = bgcolor, command = lambda: upgrade_target('fans', 'tour_gain', 'tour_upgrade_cost', 'tour'))
 tour_gain_label = Label(tour_frame, text = '+44,000 fans/sec', bg = bgcolor, fg = 'white')
@@ -108,13 +110,19 @@ tour_upgrade_cost_label = Label(tour_frame, text = 'Cost: 3,300,000,000', bg = b
 footer_frame = Frame(win, bg = bgcolor)
 save_button = Button(footer_frame, text = "Save and Quit", highlightbackground = bgcolor, command = lambda: quit())
 info_label = Label(footer_frame, text = 'Welcome to MixxMaster!', bg = bgcolor, fg = 'white', font = ('Helvetica', 20))
+prestige_button = Button(footer_frame, text = 'Fall from Grace!', highlightbackground = bgcolor, command = lambda: maybe())
+multiplier_label = Label(footer_frame, text = '0 hits', bg = bgcolor, fg = 'white')
 
 #button click
 def click():
     data['fans'] += data['lyrics']
-    update_displays()
+    data['forever_fans'] += data['lyrics']
+    fans_display.configure(text = '{:,}'.format(data['fans']) + ' fans')
     
 #adding buildings
+def add_to_target(k1, k2, k3):
+    data[k1], data[k2], data[k3] = building_add(data[k1], data[k2], data[k3], k3)
+    update_displays()
 def building_add(fans, cost, building, name):
     if fans >= cost:
         fans -= cost
@@ -123,10 +131,9 @@ def building_add(fans, cost, building, name):
         info_label.configure(text = 'Got a ' + name)
     else:
         info_label.configure(text = 'Need more fans!')
+    update_fans_per_sec()
     return fans, cost, building
-def add_to_target(k1, k2, k3):
-    data[k1], data[k2], data[k3] = building_add(data[k1], data[k2], data[k3], k3)
-    update_displays()
+#upgrading buildings
 def upgrade_target(k1, k2, k3, k4):
     data[k1], data[k2], data[k3] = upgrade_multiplier(data[k1], data[k2], data[k3], k4)
     update_displays()
@@ -141,19 +148,24 @@ def upgrade_multiplier(fans, gain, cost, name):
             info_label.configure(text = 'Upgraded your ' + name + 's')
     else:
         info_label.configure(text = 'Need more fans!')
+    update_fans_per_sec()
     return fans, gain, cost
         
 #update fan amount
+def update_fans_per_sec():
+    data['fans_per_sec'] = round(data['multiplier'] * ((data['jingle'] * data['jingle_gain']) + (data['song'] * data['song_gain']) + (data['video'] * data['video_gain']) + (data['album'] * data['album_gain']) + (data['gig'] * data['gig_gain']) + (data['festival'] * data['festival_gain']) + (data['headliner'] * data['headliner_gain']) + (data['tour'] * data['tour_gain'])), 1)
+
 def update_count():
     global count_timer
-    data['fans'] = (data['jingle'] * data['jingle_gain']) + (data['song'] * data['song_gain']) + (data['video'] * data['video_gain']) + (data['album'] * data['album_gain']) + (data['gig'] * data['gig_gain']) + (data['festival'] * data['festival_gain']) + (data['headliner'] * data['headliner_gain']) + (data['tour'] * data['tour_gain'])+ data['fans']
-    update_displays()
+    data['fans'] += data['fans_per_sec']
+    data['forever_fans'] += data['fans_per_sec']
+    fans_display.configure(text = '{:,}'.format(data['fans']) + ' fans')
     count_timer = threading.Timer(1, update_count)
     count_timer.start()
     
 #update displays
 def update_displays():
-    fans_display.configure(text = '{:,}'.format(data['fans']) + ' fans')
+    fans_per_sec_display.configure(text = '{:,}'.format(data['fans_per_sec']) + ' total fans/sec')
     lyrics_gain_label.configure(text = '+' + '{:,}'.format(data['lyrics']) + ' fans/click')
     lyrics_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['lyrics_upgrade_cost']))
     jingle_cost_display.configure(text = "Cost: " + '{:,}'.format(data['jingle_cost']))
@@ -188,6 +200,66 @@ def update_displays():
     tour_count.configure(text = 'Owned: ' + '{:,}'.format(data['tour']))
     tour_gain_label.configure(text = '+' + '{:,}'.format(data['tour_gain']) + ' fans/sec')
     tour_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['tour_upgrade_cost']))
+    multiplier_label.configure(text = str(data['prestige']) + ' hits!')
+
+#prestige system    
+def maybe():
+    earn = math.floor((data['forever_fans']/(10**12))**(1./3))
+    modal = Toplevel(bg = bgcolor)
+    modal.geometry('%dx%d%+d%+d' % (350, 200, 378, 263))
+    desc_label = Message(modal, aspect = 300, text = '', fg = 'white', bg = bgcolor)
+    desc_label.configure(text = 'Falling from grace will restart your music career, but a handful of diehard fans continue to listen to your greatest hits. Every hit you produce gives you an extra 1 percent of your total fans/sec. Are you ready to crash and burn? You will earn ' + str(earn)+ ' hits now.')
+    yes_button = Button(modal, text = 'Yes', highlightbackground = bgcolor, command = lambda: prestige())
+    no_button = Button(modal, text = 'No', highlightbackground = bgcolor, command = modal.destroy)
+    desc_label.pack()
+    yes_button.pack()
+    no_button.pack()
+    modal.transient(win)
+    modal.grab_set()
+    win.wait_window(modal)
+    
+def prestige():
+    data['prestige'] = math.floor((data['forever_fans']/(10**12))**(1./3))
+    data['forever_fans'] += data['fans']
+    data['multiplier'] = data['multiplier'] + (data['prestige']/100.)
+    data['fans'] = 0
+    data['fans_per_sec'] = 0
+    data['jingle'] = 0
+    data['song'] = 0
+    data['video'] = 0
+    data['album'] = 0
+    data['gig'] = 0
+    data['festival'] = 0
+    data['headliner'] = 0
+    data['tour'] = 0
+    data['lyrics'] = 1
+    data['song_gain'] = 1
+    data['lyrics_upgrade_cost'] = 50
+    data['jingle_cost'] = 15
+    data['jingle_gain'] = .1
+    data['jingle_upgrade_cost'] = 100
+    data['song_cost'] = 100
+    data['song_upgrade_cost'] = 1000
+    data['video_cost'] = 1100
+    data['video_gain'] = 8
+    data['video_upgrade_cost'] = 11000
+    data['album_cost'] = 12000
+    data['album_gain'] = 47
+    data['album_upgrade_cost'] = 120000
+    data['gig_cost'] = 130000
+    data['gig_gain'] = 260
+    data['gig_upgrade_cost'] = 1300000
+    data['festival_cost'] = 1400000
+    data['festival_gain'] = 1400
+    data['festival_upgrade_cost'] = 14000000
+    data['headliner_cost'] = 20000000
+    data['headliner_gain'] = 7800
+    data['headliner_upgrade_cost'] = 200000000
+    data['tour_cost'] = 330000000
+    data['tour_gain'] = 44000
+    data['tour_upgrade_cost'] = 3300000000
+    info_label.configure(text = 'Reset the game!')
+    update_displays()
     
 #save and quit
 def save():
@@ -238,10 +310,11 @@ footer_frame.grid(row = 3, column = 0, rowspan = 2)
 
 #inside frames
 header_label.grid(row = 0, column = 0)
-big_button.grid(row = 0, column = 0)
-lyrics_upgrade_button.grid(row = 0, column = 1)
-lyrics_gain_label.grid(row = 1, column = 0, columnspan = 2)
-lyrics_upgrade_cost_label.grid(row = 2, column = 0, columnspan = 2)
+fans_per_sec_display.grid(row = 0, column = 0, columnspan = 2)
+big_button.grid(row = 1, column = 0)
+lyrics_upgrade_button.grid(row = 1, column = 1)
+lyrics_gain_label.grid(row = 2, column = 0, columnspan = 2)
+lyrics_upgrade_cost_label.grid(row = 3, column = 0, columnspan = 2)
 jingle_button.grid(row = 0, column = 0)
 jingle_cost_display.grid(row = 1, column = 0)
 jingle_count.grid(row = 2, column = 0)
@@ -292,6 +365,8 @@ tour_gain_label.grid(row = 1, column = 1)
 tour_upgrade_cost_label.grid(row = 2, column = 1)
 save_button.grid(row = 2, column = 0)
 info_label.grid(row = 1, column = 0)
+prestige_button.grid(row = 3, column = 0)
+multiplier_label.grid(row = 4, column = 0)
 
 load() #loads saved data
 update_count() #starting update for fan count
