@@ -8,8 +8,8 @@ For much better examples of this style of game, look into Cookie Clicker or Adve
 Current list of to-dos:
 
   Add more building types
-
-  Add upgrades that apply overall benefits to game (speed increase, multipliers, ect.)
+  
+  Construct a prestige system
 
   Add acheivements (just for fun!)
 
