@@ -18,16 +18,19 @@ bgcolor = '#10111E'
 header = PhotoImage(file = header_image)
 
 #initializing variables
-data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500, 'album': 0, 'album_cost': 3000, 'jingle_gain': .1, 'song_gain': .5, 'video_gain': 4, 'album_gain': 10, 'gig': 0, 'gig_cost': 10000, 'gig_gain': 40, 'jingle_upgrade_cost': 100, 'song_upgrade_cost': 1000, 'video_upgrade_cost': 11000, 'album_upgrade_cost': 120000, 'gig_upgrade_cost': 1300000}
+data = {'fans': 0, 'lyrics': 1, 'jingle': 0, 'song': 0, 'video': 0, 'jingle_cost': 15, 'song_cost': 100, 'video_cost': 500, 'album': 0, 'album_cost': 3000, 'jingle_gain': .1, 'song_gain': .5, 'video_gain': 4, 'album_gain': 10, 'gig': 0, 'gig_cost': 10000, 'gig_gain': 40, 'lyrics_upgrade_cost': 100, 'jingle_upgrade_cost': 100, 'song_upgrade_cost': 1000, 'video_upgrade_cost': 11000, 'album_upgrade_cost': 120000, 'gig_upgrade_cost': 1300000}
 
 #header elements
 header_frame = Frame(win)
 header_label = Label(header_frame, image = header)
 
 #lyrics elements
-fans_label = Label(win, text = "+1 fans/click", bg = bgcolor, fg = 'white')
-fans_display = Label(win, text = "0 fans", bg = bgcolor, fg = 'white')
-big_button = Button(win, text = "Write a lyric", highlightbackground = bgcolor, command = lambda: click())
+lyrics_frame = Frame(win, bg = bgcolor)
+fans_display = Label(win, text = "0 fans", bg = bgcolor, fg = 'white', font = ('Helvetica', 26))
+big_button = Button(lyrics_frame, text = "Write a lyric", highlightbackground = bgcolor, command = lambda: click())
+lyrics_upgrade_button = Button(lyrics_frame, text = "Double your clicking output", highlightbackground = bgcolor, command = lambda: upgrade_target('fans', 'lyrics', 'lyrics_upgrade_cost', 'lyrics'))
+lyrics_gain_label = Label(lyrics_frame, text = '+1 fans/click', bg = bgcolor, fg = 'white')
+lyrics_upgrade_cost_label = Label(lyrics_frame, text = 'Cost: 100', bg = bgcolor, fg = 'white')
 
 #jingle elements
 jingle_frame = Frame(win, bg = bgcolor)
@@ -104,7 +107,10 @@ def upgrade_multiplier(fans, gain, cost, name):
         fans -= cost
         gain = round(gain * 2, 1)
         cost = cost * 3
-        info_label.configure(text = 'Upgraded your ' + name + 's')
+        if name == 'lyrics':
+            info_label.configure(text = 'Upgraded your ' + name)
+        else:
+            info_label.configure(text = 'Upgraded your ' + name + 's')
     else:
         info_label.configure(text = 'Need more fans!')
     return fans, gain, cost
@@ -119,27 +125,29 @@ def update_count():
     
 #update displays
 def update_displays():
-    fans_display.configure(text = str(data['fans']) + ' fans')
-    jingle_cost_display.configure(text = "Cost: "+str(data['jingle_cost']))
-    jingle_count.configure(text = 'Owned: ' + str(data['jingle']))
-    song_cost_display.configure(text = "Cost: "+str(data['song_cost']))
-    song_count.configure(text = 'Owned: ' + str(data['song']))
-    video_cost_display.configure(text = "Cost: "+str(data['video_cost']))
-    video_count.configure(text = 'Owned: ' + str(data['video']))
-    album_cost_display.configure(text = "Cost: "+str(data['album_cost']))
-    album_count.configure(text = 'Owned: ' + str(data['album']))
-    gig_cost_display.configure(text = "Cost: "+str(data['gig_cost']))
-    gig_count.configure(text = 'Owned: ' + str(data['gig']))
-    jingle_gain_label.configure(text = '+' + str(data['jingle_gain']) + ' fans/sec')
-    jingle_upgrade_cost_label.configure(text = 'Cost: ' + str(data['jingle_upgrade_cost']))
-    song_gain_label.configure(text = '+' + str(data['song_gain']) + ' fans/sec')
-    song_upgrade_cost_label.configure(text = 'Cost: ' + str(data['song_upgrade_cost']))
-    video_gain_label.configure(text = '+' + str(data['video_gain']) + ' fans/sec')
-    video_upgrade_cost_label.configure(text = 'Cost: ' + str(data['video_upgrade_cost']))
-    album_gain_label.configure(text = '+' + str(data['album_gain']) + ' fans/sec')
-    album_upgrade_cost_label.configure(text = 'Cost: ' + str(data['album_upgrade_cost']))
-    gig_gain_label.configure(text = '+' + str(data['gig_gain']) + ' fans/sec')
-    gig_upgrade_cost_label.configure(text = 'Cost: ' + str(data['gig_upgrade_cost']))
+    fans_display.configure(text = '{:,}'.format(data['fans']) + ' fans')
+    lyrics_gain_label.configure(text = '+' + '{:,}'.format(data['lyrics']) + ' fans/click')
+    lyrics_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['lyrics_upgrade_cost']))
+    jingle_cost_display.configure(text = "Cost: " + '{:,}'.format(data['jingle_cost']))
+    jingle_count.configure(text = 'Owned: ' + '{:,}'.format(data['jingle']))
+    song_cost_display.configure(text = "Cost: " + '{:,}'.format(data['song_cost']))
+    song_count.configure(text = 'Owned: ' + '{:,}'.format(data['song']))
+    video_cost_display.configure(text = "Cost: " + '{:,}'.format(data['video_cost']))
+    video_count.configure(text = 'Owned: ' + '{:,}'.format(data['video']))
+    album_cost_display.configure(text = "Cost: " + '{:,}'.format(data['album_cost']))
+    album_count.configure(text = 'Owned: ' + '{:,}'.format(data['album']))
+    gig_cost_display.configure(text = "Cost: " + '{:,}'.format(data['gig_cost']))
+    gig_count.configure(text = 'Owned: ' + '{:,}'.format(data['gig']))
+    jingle_gain_label.configure(text = '+' + '{:,}'.format(data['jingle_gain']) + ' fans/sec')
+    jingle_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['jingle_upgrade_cost']))
+    song_gain_label.configure(text = '+' + '{:,}'.format(data['song_gain']) + ' fans/sec')
+    song_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['song_upgrade_cost']))
+    video_gain_label.configure(text = '+' + '{:,}'.format(data['video_gain']) + ' fans/sec')
+    video_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['video_upgrade_cost']))
+    album_gain_label.configure(text = '+' + '{:,}'.format(data['album_gain']) + ' fans/sec')
+    album_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['album_upgrade_cost']))
+    gig_gain_label.configure(text = '+' + '{:,}'.format(data['gig_gain']) + ' fans/sec')
+    gig_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['gig_upgrade_cost']))
 
 #save and quit
 def save():
@@ -176,18 +184,21 @@ win.grid_columnconfigure(0, weight=1, uniform="fred")
 win.grid_columnconfigure(1, weight=1, uniform="fred")
 win.grid_columnconfigure(2, weight=1, uniform="fred")
 header_frame.grid(row = 0 , column = 0, columnspan = 3, sticky = W, pady = (0, 195))
-big_button.grid(row = 1, column = 0)
-fans_label.grid(row = 1, column = 1)
-fans_display.grid(row = 1, column = 2)
-jingle_frame.grid(row = 2, column = 0)
-song_frame.grid(row = 2, column = 1)
-video_frame.grid(row = 2, column = 2)
-album_frame.grid(row = 3, column = 0)
-gig_frame.grid(row = 3, column = 1)
-save_button.grid(row = 4, column = 0)
-info_label.grid(row = 4, column = 2)
+fans_display.grid(row = 0, column = 0, columnspan = 3)
+lyrics_frame.grid(row = 2, column  = 0, rowspan = 3)
+jingle_frame.grid(row = 2, column = 1)
+song_frame.grid(row = 2, column = 2)
+video_frame.grid(row = 3, column = 1)
+album_frame.grid(row = 3, column = 2)
+gig_frame.grid(row = 4, column = 1)
+save_button.grid(row = 5, column = 0)
+info_label.grid(row = 5, column = 2)
 #inside frames
 header_label.grid(row = 0, column = 0)
+big_button.grid(row = 0, column = 0)
+lyrics_upgrade_button.grid(row = 0, column = 1)
+lyrics_gain_label.grid(row = 1, column = 1)
+lyrics_upgrade_cost_label.grid(row = 2, column = 1)
 jingle_button.grid(row = 0, column = 0)
 jingle_cost_display.grid(row = 1, column = 0)
 jingle_count.grid(row = 2, column = 0)
