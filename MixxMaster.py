@@ -281,7 +281,7 @@ def prestige():
     
 #save and quit
 def save():
-    fileObject = open('savefile.dat', 'wb')
+    fileObject = open('savefile.dat', 'w')
     pickle.dump(data, fileObject)
     fileObject.close()
 
@@ -302,7 +302,7 @@ def autosave():
     
 #load save state
 def load():
-    fileObject = open('savefile.dat', 'rb')
+    fileObject = open('savefile.dat', 'r')
     data.update(pickle.load(fileObject))
     fileObject.close()
     update_displays()
