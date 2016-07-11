@@ -140,6 +140,7 @@ def click():
 #adding buildings
 def add_to_target(k1, k2, k3):
     data[k1], data[k2], data[k3] = building_add(data[k1], data[k2], data[k3], k3)
+    update_fans_per_sec()
     update_displays()
 def building_add(fans, cost, building, name):
     if fans >= cost:
@@ -149,7 +150,6 @@ def building_add(fans, cost, building, name):
         info_label.configure(text = 'Got a ' + name)
     else:
         info_label.configure(text = 'Need more fans!')
-    update_fans_per_sec()
     return fans, cost, building
 #upgrading buildings
 def upgrade_target(k1, k2, k3, k4):
@@ -175,7 +175,7 @@ def update_fans_per_sec():
 
 def update_count():
     global count_timer
-    data['fans'] = round(data['fans'] + data['fans_per_sec'], 1)
+    data['fans'] = data['fans'] + data['fans_per_sec']
     data['forever_fans'] += data['fans_per_sec']
     fans_display.configure(text = '{:,}'.format(data['fans']) + ' fans')
     count_timer = threading.Timer(1, update_count)
@@ -250,32 +250,32 @@ def prestige():
     data['festival'] = 0
     data['headliner'] = 0
     data['tour'] = 0
-    data['lyrics'] = 1
-    data['song_gain'] = 1
-    data['lyrics_upgrade_cost'] = 50
-    data['jingle_cost'] = 15
-    data['jingle_gain'] = .1
-    data['jingle_upgrade_cost'] = 100
-    data['song_cost'] = 100
-    data['song_upgrade_cost'] = 1000
-    data['video_cost'] = 1100
-    data['video_gain'] = 8
-    data['video_upgrade_cost'] = 11000
-    data['album_cost'] = 12000
-    data['album_gain'] = 47
-    data['album_upgrade_cost'] = 120000
-    data['gig_cost'] = 130000
-    data['gig_gain'] = 260
-    data['gig_upgrade_cost'] = 1300000
-    data['festival_cost'] = 1400000
-    data['festival_gain'] = 1400
-    data['festival_upgrade_cost'] = 14000000
-    data['headliner_cost'] = 20000000
-    data['headliner_gain'] = 7800
-    data['headliner_upgrade_cost'] = 200000000
-    data['tour_cost'] = 330000000
-    data['tour_gain'] = 44000
-    data['tour_upgrade_cost'] = 3300000000
+    data['lyrics'] = 10
+    data['song_gain'] = 10
+    data['lyrics_upgrade_cost'] = 500
+    data['jingle_cost'] = 150
+    data['jingle_gain'] = 1
+    data['jingle_upgrade_cost'] = 1000
+    data['song_cost'] = 1000
+    data['song_upgrade_cost'] = 10000
+    data['video_cost'] = 11000
+    data['video_gain'] = 80
+    data['video_upgrade_cost'] = 110000
+    data['album_cost'] = 120000
+    data['album_gain'] = 470
+    data['album_upgrade_cost'] = 1200000
+    data['gig_cost'] = 1300000
+    data['gig_gain'] = 2600
+    data['gig_upgrade_cost'] = 13000000
+    data['festival_cost'] = 14000000
+    data['festival_gain'] = 14000
+    data['festival_upgrade_cost'] = 140000000
+    data['headliner_cost'] = 200000000
+    data['headliner_gain'] = 78000
+    data['headliner_upgrade_cost'] = 2000000000
+    data['tour_cost'] = 3300000000
+    data['tour_gain'] = 440000
+    data['tour_upgrade_cost'] = 33000000000
     info_label.configure(text = 'Reset the game!')
     update_displays()
     

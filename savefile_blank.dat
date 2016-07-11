@@ -40,7 +40,7 @@ p13
 I0
 sS'forever_fans'
 p14
-I0
+F6225.5
 sS'album_cost'
 p15
 I120000
@@ -103,10 +103,10 @@ p34
 I33000000000
 sS'multiplier'
 p35
-F1
+F1.0
 sS'prestige'
 p36
-I0
+F0.0
 sS'festival'
 p37
 I0
