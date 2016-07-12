@@ -135,7 +135,7 @@ multiplier_label = Label(footer_frame, text = '0 hits', bg = bgcolor, fg = 'whit
 def click():
     data['fans'] += data['lyrics']
     data['forever_fans'] += data['lyrics']
-    fans_display.configure(text = '{:,}'.format(data['fans']) + ' fans')
+    fans_display.configure(text = break_point(data['fans']) + ' fans')
     
 #adding buildings
 def add_to_target(k1, k2, k3):
@@ -177,47 +177,70 @@ def update_count():
     global count_timer
     data['fans'] = data['fans'] + data['fans_per_sec']
     data['forever_fans'] += data['fans_per_sec']
-    fans_display.configure(text = '{:,}'.format(data['fans']) + ' fans')
+    fans_display.configure(text = break_point(data['fans']) + ' fans')
     count_timer = threading.Timer(1, update_count)
     count_timer.start()
     
 #update displays
+def break_point(input):
+    if input >= 10**21:
+        return (str(input)[:-30] + ' nonillion')
+    if input >= 10**21:
+        return (str(input)[:-27] + ' octillion')
+    if input >= 10**21:
+        return (str(input)[:-24] + ' septillion')
+    if input >= 10**21:
+        return (str(input)[:-21] + ' sextillion')
+    if input >= 10**18:
+        return (str(input)[:-18] + ' quintillion')
+    if input >= 10**15:
+        return (str(input)[:-15] + ' quadrillion')
+    if input >= 10**12:
+        return (str(input)[:-12] + ' trillion')
+    if input >= 10**9:
+        return (str(input)[:-9] + ' billion')
+    if input >= 10**6:
+        return (str(input)[:-6] + ' million')
+    if input >= 10**4:
+        return (str(input)[:-3] + ' thousand')
+    return str(input)
+
 def update_displays():
-    fans_per_sec_display.configure(text = '{:,}'.format(data['fans_per_sec']) + ' total fans/sec')
-    lyrics_gain_label.configure(text = '+' + '{:,}'.format(data['lyrics']) + ' fans/click')
-    lyrics_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['lyrics_upgrade_cost']))
-    jingle_cost_display.configure(text = "Cost: " + '{:,}'.format(data['jingle_cost']))
-    jingle_count.configure(text = 'Owned: ' + '{:,}'.format(data['jingle']))
-    jingle_gain_label.configure(text = '+' + '{:,}'.format(data['jingle_gain']) + ' fans/sec')
-    jingle_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['jingle_upgrade_cost']))
-    song_cost_display.configure(text = "Cost: " + '{:,}'.format(data['song_cost']))
-    song_count.configure(text = 'Owned: ' + '{:,}'.format(data['song']))
-    song_gain_label.configure(text = '+' + '{:,}'.format(data['song_gain']) + ' fans/sec')
-    song_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['song_upgrade_cost']))
-    video_cost_display.configure(text = "Cost: " + '{:,}'.format(data['video_cost']))
-    video_count.configure(text = 'Owned: ' + '{:,}'.format(data['video']))
-    video_gain_label.configure(text = '+' + '{:,}'.format(data['video_gain']) + ' fans/sec')
-    video_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['video_upgrade_cost']))
-    album_cost_display.configure(text = "Cost: " + '{:,}'.format(data['album_cost']))
-    album_count.configure(text = 'Owned: ' + '{:,}'.format(data['album']))
-    album_gain_label.configure(text = '+' + '{:,}'.format(data['album_gain']) + ' fans/sec')
-    album_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['album_upgrade_cost']))
-    gig_cost_display.configure(text = "Cost: " + '{:,}'.format(data['gig_cost']))
-    gig_count.configure(text = 'Owned: ' + '{:,}'.format(data['gig']))
-    gig_gain_label.configure(text = '+' + '{:,}'.format(data['gig_gain']) + ' fans/sec')
-    gig_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['gig_upgrade_cost']))
-    festival_cost_display.configure(text = "Cost: " + '{:,}'.format(data['festival_cost']))
-    festival_count.configure(text = 'Owned: ' + '{:,}'.format(data['festival']))
-    festival_gain_label.configure(text = '+' + '{:,}'.format(data['festival_gain']) + ' fans/sec')
-    festival_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['festival_upgrade_cost']))
-    headliner_cost_display.configure(text = "Cost: " + '{:,}'.format(data['headliner_cost']))
-    headliner_count.configure(text = 'Owned: ' + '{:,}'.format(data['headliner']))
-    headliner_gain_label.configure(text = '+' + '{:,}'.format(data['headliner_gain']) + ' fans/sec')
-    headliner_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['headliner_upgrade_cost']))
-    tour_cost_display.configure(text = "Cost: " + '{:,}'.format(data['tour_cost']))
-    tour_count.configure(text = 'Owned: ' + '{:,}'.format(data['tour']))
-    tour_gain_label.configure(text = '+' + '{:,}'.format(data['tour_gain']) + ' fans/sec')
-    tour_upgrade_cost_label.configure(text = 'Cost: ' + '{:,}'.format(data['tour_upgrade_cost']))
+    fans_per_sec_display.configure(text = break_point(data['fans_per_sec']) + ' total fans/sec')
+    lyrics_gain_label.configure(text = '+' + break_point(data['lyrics']) + ' fans/click')
+    lyrics_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['lyrics_upgrade_cost']))
+    jingle_cost_display.configure(text = "Cost: " + break_point(data['jingle_cost']))
+    jingle_count.configure(text = 'Owned: ' + break_point(data['jingle']))
+    jingle_gain_label.configure(text = '+' + break_point(data['jingle_gain']) + ' fans/sec')
+    jingle_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['jingle_upgrade_cost']))
+    song_cost_display.configure(text = "Cost: " + break_point(data['song_cost']))
+    song_count.configure(text = 'Owned: ' + break_point(data['song']))
+    song_gain_label.configure(text = '+' + break_point(data['song_gain']) + ' fans/sec')
+    song_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['song_upgrade_cost']))
+    video_cost_display.configure(text = "Cost: " + break_point(data['video_cost']))
+    video_count.configure(text = 'Owned: ' + break_point(data['video']))
+    video_gain_label.configure(text = '+' + break_point(data['video_gain']) + ' fans/sec')
+    video_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['video_upgrade_cost']))
+    album_cost_display.configure(text = "Cost: " + break_point(data['album_cost']))
+    album_count.configure(text = 'Owned: ' + break_point(data['album']))
+    album_gain_label.configure(text = '+' + break_point(data['album_gain']) + ' fans/sec')
+    album_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['album_upgrade_cost']))
+    gig_cost_display.configure(text = "Cost: " + break_point(data['gig_cost']))
+    gig_count.configure(text = 'Owned: ' + break_point(data['gig']))
+    gig_gain_label.configure(text = '+' + break_point(data['gig_gain']) + ' fans/sec')
+    gig_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['gig_upgrade_cost']))
+    festival_cost_display.configure(text = "Cost: " + break_point(data['festival_cost']))
+    festival_count.configure(text = 'Owned: ' + break_point(data['festival']))
+    festival_gain_label.configure(text = '+' + break_point(data['festival_gain']) + ' fans/sec')
+    festival_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['festival_upgrade_cost']))
+    headliner_cost_display.configure(text = "Cost: " + break_point(data['headliner_cost']))
+    headliner_count.configure(text = 'Owned: ' + break_point(data['headliner']))
+    headliner_gain_label.configure(text = '+' + break_point(data['headliner_gain']) + ' fans/sec')
+    headliner_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['headliner_upgrade_cost']))
+    tour_cost_display.configure(text = "Cost: " + break_point(data['tour_cost']))
+    tour_count.configure(text = 'Owned: ' + break_point(data['tour']))
+    tour_gain_label.configure(text = '+' + break_point(data['tour_gain']) + ' fans/sec')
+    tour_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['tour_upgrade_cost']))
     multiplier_label.configure(text = str(data['prestige']) + ' hits!')
 
 #prestige system    
