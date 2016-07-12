@@ -146,7 +146,7 @@ def building_add(fans, cost, building, name):
     if fans >= cost:
         fans -= cost
         building += 1
-        cost = round(cost * (1.07**building), 1)
+        cost = int(cost * (1.07**building))
         info_label.configure(text = 'Got a ' + name)
     else:
         info_label.configure(text = 'Need more fans!')
@@ -154,11 +154,12 @@ def building_add(fans, cost, building, name):
 #upgrading buildings
 def upgrade_target(k1, k2, k3, k4):
     data[k1], data[k2], data[k3] = upgrade_multiplier(data[k1], data[k2], data[k3], k4)
+    update_fans_per_sec()
     update_displays()
 def upgrade_multiplier(fans, gain, cost, name):
     if fans >= cost:
         fans -= cost
-        gain = round(gain * 2, 1)
+        gain = int(gain * 2)
         cost = cost * 3
         if name == 'lyrics':
             info_label.configure(text = 'Upgraded your ' + name)
@@ -166,12 +167,11 @@ def upgrade_multiplier(fans, gain, cost, name):
             info_label.configure(text = 'Upgraded your ' + name + 's')
     else:
         info_label.configure(text = 'Need more fans!')
-    update_fans_per_sec()
     return fans, gain, cost
         
 #update fan amount
 def update_fans_per_sec():
-    data['fans_per_sec'] = round(data['multiplier'] * ((data['jingle'] * data['jingle_gain']) + (data['song'] * data['song_gain']) + (data['video'] * data['video_gain']) + (data['album'] * data['album_gain']) + (data['gig'] * data['gig_gain']) + (data['festival'] * data['festival_gain']) + (data['headliner'] * data['headliner_gain']) + (data['tour'] * data['tour_gain'])), 1)
+    data['fans_per_sec'] = int(data['multiplier'] * ((data['jingle'] * data['jingle_gain']) + (data['song'] * data['song_gain']) + (data['video'] * data['video_gain']) + (data['album'] * data['album_gain']) + (data['gig'] * data['gig_gain']) + (data['festival'] * data['festival_gain']) + (data['headliner'] * data['headliner_gain']) + (data['tour'] * data['tour_gain'])))
 
 def update_count():
     global count_timer
@@ -222,7 +222,7 @@ def update_displays():
 
 #prestige system    
 def maybe():
-    earn = math.floor((data['forever_fans']/(10**12))**(1./3))
+    earn = int(math.floor((data['forever_fans']/(10**13))**(1./3)))
     modal = Toplevel(bg = bgcolor)
     modal.geometry('%dx%d%+d%+d' % (350, 200, 378, 263))
     desc_label = Message(modal, aspect = 300, text = '', fg = 'white', bg = bgcolor)
@@ -238,7 +238,7 @@ def maybe():
     
 def prestige():
     data['forever_fans'] += data['fans']
-    data['prestige'] = math.floor((data['forever_fans']/(10**12))**(1./3))
+    data['prestige'] = int(math.floor((data['forever_fans']/(10**13))**(1./3)))
     data['multiplier'] = data['multiplier'] + (data['prestige']/100.)
     data['fans'] = 0
     data['fans_per_sec'] = 0
@@ -333,54 +333,54 @@ big_button.grid(row = 1, column = 0)
 lyrics_upgrade_button.grid(row = 1, column = 1)
 lyrics_gain_label.grid(row = 2, column = 0, columnspan = 2)
 lyrics_upgrade_cost_label.grid(row = 3, column = 0, columnspan = 2)
-jingle_button.grid(row = 0, column = 0, padx = (26, 0))
-jingle_cost_display.grid(row = 1, column = 0, padx = (26, 0))
-jingle_count.grid(row = 2, column = 0, padx = (26, 0))
-jingle_upgrade_button.grid(row = 0, column = 1, padx = (0, 25))
-jingle_gain_label.grid(row = 1, column = 1, padx = (0, 25))
-jingle_upgrade_cost_label.grid(row = 2, column = 1, padx = (0, 25))
-song_button.grid(row = 0, column = 0, padx = (21, 0))
-song_cost_display.grid(row = 1, column = 0, padx = (21, 0))
-song_count.grid(row = 2, column = 0, padx = (21, 0))
-song_upgrade_button.grid(row = 0, column = 1, padx = (0, 20))
-song_gain_label.grid(row = 1, column = 1, padx = (0, 20))
-song_upgrade_cost_label.grid(row = 2, column = 1, padx = (0, 20))
+jingle_button.grid(row = 0, column = 0)
+jingle_cost_display.grid(row = 1, column = 0)
+jingle_count.grid(row = 2, column = 0)
+jingle_upgrade_button.grid(row = 0, column = 1)
+jingle_gain_label.grid(row = 2, column = 1)
+jingle_upgrade_cost_label.grid(row = 1, column = 1)
+song_button.grid(row = 0, column = 0)
+song_cost_display.grid(row = 1, column = 0)
+song_count.grid(row = 2, column = 0)
+song_upgrade_button.grid(row = 0, column = 1)
+song_gain_label.grid(row = 2, column = 1)
+song_upgrade_cost_label.grid(row = 1, column = 1)
 video_button.grid(row = 0, column = 0)
 video_cost_display.grid(row = 1, column = 0)
 video_count.grid(row = 2, column = 0)
 video_upgrade_button.grid(row = 0, column = 1)
-video_gain_label.grid(row = 1, column = 1)
-video_upgrade_cost_label.grid(row = 2, column = 1)
-album_button.grid(row = 0, column = 0, padx = (19, 0))
-album_cost_display.grid(row = 1, column = 0, padx = (19, 0))
-album_count.grid(row = 2, column = 0, padx = (19, 0))
-album_upgrade_button.grid(row = 0, column = 1, padx = (0, 18))
-album_gain_label.grid(row = 1, column = 1, padx = (0, 18))
-album_upgrade_cost_label.grid(row = 2, column = 1, padx = (0, 18))
-gig_button.grid(row = 0, column = 0, padx = (41, 0))
-gig_cost_display.grid(row = 1, column = 0, padx = (41, 0))
-gig_count.grid(row = 2, column = 0, padx = (41, 0))
-gig_upgrade_button.grid(row = 0, column = 1, padx = (0, 40))
-gig_gain_label.grid(row = 1, column = 1, padx = (0, 40))
-gig_upgrade_cost_label.grid(row = 2, column = 1, padx = (0, 40))
+video_gain_label.grid(row = 2, column = 1)
+video_upgrade_cost_label.grid(row = 1, column = 1)
+album_button.grid(row = 0, column = 0)
+album_cost_display.grid(row = 1, column = 0)
+album_count.grid(row = 2, column = 0)
+album_upgrade_button.grid(row = 0, column = 1)
+album_gain_label.grid(row = 2, column = 1)
+album_upgrade_cost_label.grid(row = 1, column = 1)
+gig_button.grid(row = 0, column = 0)
+gig_cost_display.grid(row = 1, column = 0)
+gig_count.grid(row = 2, column = 0)
+gig_upgrade_button.grid(row = 0, column = 1)
+gig_gain_label.grid(row = 2, column = 1)
+gig_upgrade_cost_label.grid(row = 1, column = 1)
 festival_button.grid(row = 0, column = 0)
 festival_cost_display.grid(row = 1, column = 0)
 festival_count.grid(row = 2, column = 0)
 festival_upgrade_button.grid(row = 0, column = 1)
-festival_gain_label.grid(row = 1, column = 1)
-festival_upgrade_cost_label.grid(row = 2, column = 1)
-headliner_button.grid(row = 0, column = 0, padx = (11, 0))
-headliner_cost_display.grid(row = 1, column = 0, padx = (11, 0))
-headliner_count.grid(row = 2, column = 0, padx = (11, 0))
-headliner_upgrade_button.grid(row = 0, column = 1, padx = (0, 10))
-headliner_gain_label.grid(row = 1, column = 1, padx = (0, 10))
-headliner_upgrade_cost_label.grid(row = 2, column = 1, padx = (0, 10))
-tour_button.grid(row = 0, column = 0, padx = (12, 0))
-tour_cost_display.grid(row = 1, column = 0, padx = (12, 0))
-tour_count.grid(row = 2, column = 0, padx = (12, 0))
-tour_upgrade_button.grid(row = 0, column = 1, padx = (0, 12))
-tour_gain_label.grid(row = 1, column = 1, padx = (0, 12))
-tour_upgrade_cost_label.grid(row = 2, column = 1, padx = (0, 12))
+festival_gain_label.grid(row = 2, column = 1)
+festival_upgrade_cost_label.grid(row = 1, column = 1)
+headliner_button.grid(row = 0, column = 0)
+headliner_cost_display.grid(row = 1, column = 0)
+headliner_count.grid(row = 2, column = 0)
+headliner_upgrade_button.grid(row = 0, column = 1)
+headliner_gain_label.grid(row = 2, column = 1)
+headliner_upgrade_cost_label.grid(row = 1, column = 1)
+tour_button.grid(row = 0, column = 0)
+tour_cost_display.grid(row = 1, column = 0)
+tour_count.grid(row = 2, column = 0)
+tour_upgrade_button.grid(row = 0, column = 1)
+tour_gain_label.grid(row = 2, column = 1)
+tour_upgrade_cost_label.grid(row = 1, column = 1)
 save_button.grid(row = 4, column = 0, pady = (20, 0))
 info_label.grid(row = 1, column = 0)
 prestige_button.grid(row = 2, column = 0)
