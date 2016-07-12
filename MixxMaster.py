@@ -184,25 +184,25 @@ def update_count():
 #update displays
 def break_point(input):
     if input >= 10**21:
-        return (str(input)[:-30] + ' nonillion')
+        return (str(input)[:-30] + '.' + str(input)[-30:-27] + ' nonillion')
     if input >= 10**21:
-        return (str(input)[:-27] + ' octillion')
+        return (str(input)[:-27] + '.' + str(input)[-27:-24] + ' octillion')
     if input >= 10**21:
-        return (str(input)[:-24] + ' septillion')
+        return (str(input)[:-24] + '.' + str(input)[-24:-21] + ' septillion')
     if input >= 10**21:
-        return (str(input)[:-21] + ' sextillion')
+        return (str(input)[:-21] + '.' + str(input)[-21:-18] + ' sextillion')
     if input >= 10**18:
-        return (str(input)[:-18] + ' quintillion')
+        return (str(input)[:-18] + '.' + str(input)[-18:-15] + ' quintillion')
     if input >= 10**15:
-        return (str(input)[:-15] + ' quadrillion')
+        return (str(input)[:-15] + '.' + str(input)[-15:-12] + ' quadrillion')
     if input >= 10**12:
-        return (str(input)[:-12] + ' trillion')
+        return (str(input)[:-12] + '.' + str(input)[-12:-9] + ' trillion')
     if input >= 10**9:
-        return (str(input)[:-9] + ' billion')
+        return (str(input)[:-9] + '.' + str(input)[-9:-6] + ' billion')
     if input >= 10**6:
-        return (str(input)[:-6] + ' million')
+        return (str(input)[:-6] + '.' + str(input)[-6:-3] + ' million')
     if input >= 10**4:
-        return (str(input)[:-3] + ' thousand')
+        return (str(input)[:-3] + '.' + str(input)[-3:] + ' thousand')
     return str(input)
 
 def update_displays():
