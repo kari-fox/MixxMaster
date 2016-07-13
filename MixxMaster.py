@@ -7,7 +7,6 @@ import os
 import math
 bg_image = os.path.join('images', 'bg.gif')
 header_image = os.path.join('images', 'header.gif')
-frame_image1 = os.path.join('images', 'framebg.gif')
 win = Tk()
 win.wm_title("MixxMaster")
 bg = PhotoImage(file = bg_image)
@@ -18,7 +17,6 @@ background_label = Label(win, image = bg)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 bgcolor = '#10111E'
 header = PhotoImage(file = header_image)
-frame1 = PhotoImage(file = frame_image1)
 
 #initializing variables
 data = {'fans': 0, 'fans_per_sec': 0, 'jingle': 0, 'song': 0, 'video': 0, 'album': 0, 'gig': 0, 'festival': 0, 'headliner': 0, 'tour': 0, 'lyrics': 1, 'lyrics_upgrade_cost': 50, 'jingle_cost': 15, 'jingle_gain': .1, 'jingle_upgrade_cost': 100, 'song_cost': 100, 'song_gain': 1, 'song_upgrade_cost': 1000, 'video_cost': 1100, 'video_gain': 8, 'video_upgrade_cost': 11000, 'album_cost': 12000, 'album_gain': 47, 'album_upgrade_cost': 120000, 'gig_cost': 130000, 'gig_gain': 260, 'gig_upgrade_cost': 1300000, 'festival_cost': 1400000, 'festival_gain': 1400, 'festival_upgrade_cost': 14000000, 'headliner_cost': 20000000, 'headliner_gain': 7800, 'headliner_upgrade_cost': 200000000, 'tour_cost': 330000000, 'tour_gain': 44000, 'tour_upgrade_cost': 3300000000, 'multiplier': 1, 'forever_fans': 0, 'prestige': 0}
@@ -37,20 +35,17 @@ lyrics_gain_label = Label(lyrics_frame, text = '+1 fans/click', bg = bgcolor, fg
 lyrics_upgrade_cost_label = Label(lyrics_frame, text = 'Cost: 100', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
 #jingle elements
-jingle_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE)
-jingle_frame_label = Label(jingle_frame, image = frame1, bg = bgcolor)
-jingle_frame_label.place(x=0, y=0, relwidth=1, relheight=1)
-jingle_button = Button(jingle_frame, text = "Make a jingle", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'jingle_cost', 'jingle'))
-jingle_count = Label(jingle_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
-jingle_cost_display = Label(jingle_frame, text = "Cost: 15", bg = bgcolor, fg = 'white', font = 'Helvetica')
-jingle_upgrade_button = Button(jingle_frame, text = "Double your jingles' output", highlightbackground = bgcolor, command = lambda: upgrade_target('fans', 'jingle_gain', 'jingle_upgrade_cost', 'jingle'))
-jingle_gain_label = Label(jingle_frame, text = '+0.1 fans/sec', bg = bgcolor, fg = 'white', font = 'Helvetica')
-jingle_upgrade_cost_label = Label(jingle_frame, text = 'Cost: 100', bg = bgcolor, fg = 'white', font = 'Helvetica')
+jingle_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
+jingle_in_frame = Frame(jingle_frame, bg = bgcolor)
+jingle_button = Button(jingle_in_frame, text = "Make a jingle", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'jingle_cost', 'jingle'))
+jingle_count = Label(jingle_in_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
+jingle_cost_display = Label(jingle_in_frame, text = "Cost: 15", bg = bgcolor, fg = 'white', font = 'Helvetica')
+jingle_upgrade_button = Button(jingle_in_frame, text = "Double your jingles' output", highlightbackground = bgcolor, command = lambda: upgrade_target('fans', 'jingle_gain', 'jingle_upgrade_cost', 'jingle'))
+jingle_gain_label = Label(jingle_in_frame, text = '+0.1 fans/sec', bg = bgcolor, fg = 'white', font = 'Helvetica')
+jingle_upgrade_cost_label = Label(jingle_in_frame, text = 'Cost: 100', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
 #song elements
-song_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE)
-song_frame_label = Label(song_frame, image = frame1, bg = bgcolor)
-song_frame_label.place(x=0, y=0, relwidth=1, relheight=1)
+song_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
 song_button = Button(song_frame, text = "Finish a song", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'song_cost', 'song'))
 song_count = Label(song_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
 song_cost_display = Label(song_frame, text = "Cost: 100", bg = bgcolor, fg = 'white', font = 'Helvetica')
@@ -59,9 +54,7 @@ song_gain_label = Label(song_frame, text = '+0.5 fans/sec', bg = bgcolor, fg = '
 song_upgrade_cost_label = Label(song_frame, text = 'Cost: 1,000', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
 # video elements
-video_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE)
-video_frame_label = Label(video_frame, image = frame1, bg = bgcolor)
-video_frame_label.place(x=0, y=0, relwidth=1, relheight=1)
+video_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
 video_button = Button(video_frame, text = "Get your own music video", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'video_cost', 'video'))
 video_count = Label(video_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
 video_cost_display = Label(video_frame, text = "Cost: 1,100", bg = bgcolor, fg = 'white', font = 'Helvetica')
@@ -70,9 +63,7 @@ video_gain_label = Label(video_frame, text = '+4 fans/sec', bg = bgcolor, fg = '
 video_upgrade_cost_label = Label(video_frame, text = 'Cost: 11,000', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
 #album elements
-album_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE)
-album_frame_label = Label(album_frame, image = frame1, bg = bgcolor)
-album_frame_label.place(x=0, y=0, relwidth=1, relheight=1)
+album_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
 album_button = Button(album_frame, text = "Drop an album", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'album_cost', 'album'))
 album_count = Label(album_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
 album_cost_display = Label(album_frame, text = "Cost: 12,000", bg = bgcolor, fg = 'white', font = 'Helvetica')
@@ -81,9 +72,7 @@ album_gain_label = Label(album_frame, text = '+10 fans/sec', bg = bgcolor, fg = 
 album_upgrade_cost_label = Label(album_frame, text = 'Cost: 120,000', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
 #gig elements
-gig_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE)
-gig_frame_label = Label(gig_frame, image = frame1, bg = bgcolor)
-gig_frame_label.place(x=0, y=0, relwidth=1, relheight=1)
+gig_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
 gig_button = Button(gig_frame, text = "Get a small gig", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'gig_cost', 'gig'))
 gig_count = Label(gig_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
 gig_cost_display = Label(gig_frame, text = "Cost: 130,000", bg = bgcolor, fg = 'white', font = 'Helvetica')
@@ -92,9 +81,7 @@ gig_gain_label = Label(gig_frame, text = '+40 fans/sec', bg = bgcolor, fg = 'whi
 gig_upgrade_cost_label = Label(gig_frame, text = 'Cost: 1,300,000', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
 #festival elements
-festival_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE)
-festival_frame_label = Label(festival_frame, image = frame1, bg = bgcolor)
-festival_frame_label.place(x=0, y=0, relwidth=1, relheight=1)
+festival_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
 festival_button = Button(festival_frame, text = "Play at a local festival", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'festival_cost', 'festival'))
 festival_count = Label(festival_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
 festival_cost_display = Label(festival_frame, text = "Cost: 1,400,000", bg = bgcolor, fg = 'white', font = 'Helvetica')
@@ -103,9 +90,7 @@ festival_gain_label = Label(festival_frame, text = '+100 fans/sec', bg = bgcolor
 festival_upgrade_cost_label = Label(festival_frame, text = 'Cost: 14,000,000', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
 #headliner elements
-headliner_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE)
-headliner_frame_label = Label(headliner_frame, image = frame1, bg = bgcolor)
-headliner_frame_label.place(x=0, y=0, relwidth=1, relheight=1)
+headliner_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
 headliner_button = Button(headliner_frame, text = "Headline a concert", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'headliner_cost', 'headliner'))
 headliner_count = Label(headliner_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
 headliner_cost_display = Label(headliner_frame, text = "Cost: 20,000,000", bg = bgcolor, fg = 'white', font = 'Helvetica')
@@ -114,9 +99,7 @@ headliner_gain_label = Label(headliner_frame, text = '+7,800 fans/sec', bg = bgc
 headliner_upgrade_cost_label = Label(headliner_frame, text = 'Cost: 200,000,000', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
 #tour elements
-tour_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE)
-tour_frame_label = Label(tour_frame, image = frame1, bg = bgcolor)
-tour_frame_label.place(x=0, y=0, relwidth=1, relheight=1)
+tour_frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
 tour_button = Button(tour_frame, text = "Go on a concert tour", highlightbackground = bgcolor, command = lambda: add_to_target('fans', 'tour_cost', 'tour'))
 tour_count = Label(tour_frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
 tour_cost_display = Label(tour_frame, text = "Cost: 330,000,000", bg = bgcolor, fg = 'white', font = 'Helvetica')
@@ -184,26 +167,42 @@ def update_count():
 #update displays
 def break_point(input):
     if input >= 10**21:
+        if str(input)[-30:-27] == '000':
+            return (str(input)[:-30] + ' nonillion')
         return (str(input)[:-30] + '.' + str(input)[-30:-27] + ' nonillion')
     if input >= 10**21:
+        if str(input)[-27:-24] == '000':
+            return (str(input)[:-27] + ' octillion')
         return (str(input)[:-27] + '.' + str(input)[-27:-24] + ' octillion')
     if input >= 10**21:
+        if str(input)[-24:-21] == '000':
+            return (str(input)[:-24] + ' septillion')
         return (str(input)[:-24] + '.' + str(input)[-24:-21] + ' septillion')
     if input >= 10**21:
+        if str(input)[-21:-18] == '000':
+            return (str(input)[:-21] + ' sextillion')
         return (str(input)[:-21] + '.' + str(input)[-21:-18] + ' sextillion')
     if input >= 10**18:
+        if str(input)[-18:-15] == '000':
+            return (str(input)[:-18] + ' quintillion')
         return (str(input)[:-18] + '.' + str(input)[-18:-15] + ' quintillion')
     if input >= 10**15:
+        if str(input)[-15:-12] == '000':
+            return (str(input)[:-15] + ' quadrillion')
         return (str(input)[:-15] + '.' + str(input)[-15:-12] + ' quadrillion')
     if input >= 10**12:
+        if str(input)[-12:-9] == '000':
+            return (str(input)[:-12] + ' trillion')
         return (str(input)[:-12] + '.' + str(input)[-12:-9] + ' trillion')
     if input >= 10**9:
+        if str(input)[-9:-6] == '000':
+            return (str(input)[:-9] + ' billion')
         return (str(input)[:-9] + '.' + str(input)[-9:-6] + ' billion')
     if input >= 10**6:
+        if str(input)[-6:-3] == '000':
+            return (str(input)[:-6] + ' million')
         return (str(input)[:-6] + '.' + str(input)[-6:-3] + ' million')
-    if input >= 10**4:
-        return (str(input)[:-3] + '.' + str(input)[-3:] + ' thousand')
-    return str(input)
+    return str('{:,}'.format(input))
 
 def update_displays():
     fans_per_sec_display.configure(text = break_point(data['fans_per_sec']) + ' total fans/sec')
@@ -334,20 +333,27 @@ def load():
 #tkinter window build
 #frames
 win.grid_columnconfigure(0, weight=1, uniform="fred")
-win.grid_columnconfigure(1, weight=1, uniform="fred")
-win.grid_columnconfigure(2, weight=1, uniform="fred")
 header_frame.grid(row = 0 , column = 0, columnspan = 3, sticky = W, pady = (0, 200))
-fans_display.grid(row = 1, column = 0, pady = 10)
-lyrics_frame.grid(row = 2, column  = 0)
-jingle_frame.grid(row = 1, column = 1, sticky = W, pady = 5)
-song_frame.grid(row = 1, column = 2, pady = 5)
-video_frame.grid(row = 2, column = 1, pady = 5)
-album_frame.grid(row = 2, column = 2, pady = 5)
-gig_frame.grid(row = 3, column = 1, pady = 5)
-festival_frame.grid(row = 3, column = 2, pady = 5)
-headliner_frame.grid(row = 4, column = 1, pady = 5)
-tour_frame.grid(row = 4, column = 2, pady = 5)
+fans_display.grid(row = 1, column = 0)
+lyrics_frame.grid(row = 2, column = 0)
+jingle_frame.grid_propagate(0)
+jingle_frame.grid(row = 1, column = 1, sticky = W, padx = 5, pady = 5)
+song_frame.grid_propagate(0)
+song_frame.grid(row = 1, column = 2, sticky = W, padx = 5, pady = 5)
+video_frame.grid_propagate(0)
+video_frame.grid(row = 2, column = 1, sticky = W, padx = 5, pady = 5)
+album_frame.grid_propagate(0)
+album_frame.grid(row = 2, column = 2, sticky = W, padx = 5, pady = 5)
+gig_frame.grid_propagate(0)
+gig_frame.grid(row = 3, column = 1, sticky = W, padx = 5, pady = 5)
+festival_frame.grid_propagate(0)
+festival_frame.grid(row = 3, column = 2, sticky = W, padx = 5, pady = 5)
+headliner_frame.grid_propagate(0)
+headliner_frame.grid(row = 4, column = 1, sticky = W, padx = 5, pady = 5)
+tour_frame.grid_propagate(0)
+tour_frame.grid(row = 4, column = 2, sticky = W, padx = 5, pady = 5)
 footer_frame.grid(row = 3, column = 0, rowspan = 2)
+jingle_in_frame.grid()
 
 #inside frames
 header_label.grid(row = 0, column = 0)
