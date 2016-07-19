@@ -34,39 +34,54 @@ lyrics_upgrade_button = Button(lyrics_frame, text = "Double your lyrics' output"
 lyrics_gain_label = Label(lyrics_frame, text = '+1 fans/click', bg = bgcolor, fg = 'white', font = 'Helvetica')
 lyrics_upgrade_cost_label = Label(lyrics_frame, text = 'Cost: 100', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
-class Buttons(object):    
-    def pieces(self, button_txt, cost_txt, upgrade_txt, gain_txt, upgrade_cost_txt, cost_data, name, gain_data, upgrade_data):
+class Buttons(object):
+    def __init__(self, button_txt, cost_txt, upgrade_txt, gain_txt, upgrade_cost_txt, cost_data, name, gain_data, upgrade_data):
+        self.button_txt = button_txt
+        self.cost_txt = cost_txt
+        self.upgrade_txt = upgrade_txt
+        self.gain_txt = gain_txt
+        self.upgrade_cost_txt = upgrade_cost_txt
+        self.cost_data = cost_data
+        self.name = name
+        self.gain_data = gain_data
+        self.upgrade_data = upgrade_data  
+    def pieces(self):
         self.frame = Frame(win, bg = bgcolor, borderwidth = 2, relief = RIDGE, width = 385, height = 74)
-        self.button = Button(self.frame, text = button_txt, highlightbackground = bgcolor, command = lambda: add_to_target('fans', cost_data, name))
+        self.button = Button(self.frame, text = self.button_txt, highlightbackground = bgcolor, command = lambda: add_to_target('fans', self.cost_data, self.name))
         self.count = Label(self.frame, text = "Owned: 0", bg = bgcolor, fg = 'white', font = 'Helvetica')
-        self.cost_display = Label(self.frame, text = cost_txt, bg = bgcolor, fg = 'white', font = 'Helvetica')
-        self.upgrade_button = Button(self.frame, text = upgrade_txt, highlightbackground = bgcolor, command = lambda: upgrade_target('fans', gain_data, upgrade_data, name))
-        self.gain_label = Label(self.frame, text = gain_txt, bg = bgcolor, fg = 'white', font = 'Helvetica')
-        self.upgrade_cost_label = Label(self.frame, text = upgrade_cost_txt, bg = bgcolor, fg = 'white', font = 'Helvetica')
+        self.cost_display = Label(self.frame, text = self.cost_txt, bg = bgcolor, fg = 'white', font = 'Helvetica')
+        self.upgrade_button = Button(self.frame, text = self.upgrade_txt, highlightbackground = bgcolor, command = lambda: upgrade_target('fans', self.gain_data, self.upgrade_data, self.name))
+        self.gain_label = Label(self.frame, text = self.gain_txt, bg = bgcolor, fg = 'white', font = 'Helvetica')
+        self.upgrade_cost_label = Label(self.frame, text = self.upgrade_cost_txt, bg = bgcolor, fg = 'white', font = 'Helvetica')
+    def update(self):
+        self.cost_display.configure(text = "Cost: " + break_point(data[self.cost_data]))
+        self.count.configure(text = 'Owned: ' + break_point(data[self.name]))
+        self.gain_label.configure(text = '+' + break_point(data[self.gain_data]) + ' fans/sec')
+        self.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data[self.upgrade_data]))
         
-jingle = Buttons()
-jingle.pieces('Make a jingle', 'Cost: 15', "Double your jingles' output", '+0.1 fans/sec', 'Cost: 100', 'jingle_cost', 'jingle', 'jingle_gain', 'jingle_upgrade_cost')
+jingle = Buttons('Make a jingle', 'Cost: 15', "Double your jingles' output", '+0.1 fans/sec', 'Cost: 100', 'jingle_cost', 'jingle', 'jingle_gain', 'jingle_upgrade_cost')
+jingle.pieces()
 
-song = Buttons()
-song.pieces("Finish a song", "Cost: 100", "Double your songs' output", '+0.5 fans/sec', 'Cost: 1,000', 'song_cost', 'song', 'song_gain', 'song_upgrade_cost')
+song = Buttons("Finish a song", "Cost: 100", "Double your songs' output", '+0.5 fans/sec', 'Cost: 1,000', 'song_cost', 'song', 'song_gain', 'song_upgrade_cost')
+song.pieces()
 
-video = Buttons()
-video.pieces("Get your own music video", "Cost: 1,100", "Double your videos' output", '+4 fans/sec', 'Cost: 11,000', 'video_cost', 'video', 'video_gain', 'video_upgrade_cost')
+video = Buttons("Get your own music video", "Cost: 1,100", "Double your videos' output", '+4 fans/sec', 'Cost: 11,000', 'video_cost', 'video', 'video_gain', 'video_upgrade_cost')
+video.pieces()
 
-album = Buttons()
-album.pieces("Drop an album", "Cost: 12,000", "Double your albums' output", '+10 fans/sec', 'Cost: 120,000', 'album_cost', 'album', 'album_gain', 'album_upgrade_cost')
+album = Buttons("Drop an album", "Cost: 12,000", "Double your albums' output", '+10 fans/sec', 'Cost: 120,000', 'album_cost', 'album', 'album_gain', 'album_upgrade_cost')
+album.pieces()
 
-gig = Buttons()
-gig.pieces("Get a small gig", "Cost: 130,000", "Double your gigs' output", '+40 fans/sec', 'Cost: 1,300,000', 'gig_cost', 'gig', 'gig_gain', 'gig_upgrade_cost')
+gig = Buttons("Get a small gig", "Cost: 130,000", "Double your gigs' output", '+40 fans/sec', 'Cost: 1,300,000', 'gig_cost', 'gig', 'gig_gain', 'gig_upgrade_cost')
+gig.pieces()
 
-festival = Buttons()
-festival.pieces("Play at a local festival", "Cost: 1,100", "Double your festivals' output", '+4 fans/sec', 'Cost: 11,000', 'festival_cost', 'festival', 'festival_gain', 'festival_upgrade_cost')
+festival = Buttons("Play at a local festival", "Cost: 1,100", "Double your festivals' output", '+4 fans/sec', 'Cost: 11,000', 'festival_cost', 'festival', 'festival_gain', 'festival_upgrade_cost')
+festival.pieces()
 
-headliner = Buttons()
-headliner.pieces("Headline a concert", "Cost: 1,100", "Double your headliners' output", '+4 fans/sec', 'Cost: 11,000', 'headliner_cost', 'headliner', 'headliner_gain', 'headliner_upgrade_cost')
+headliner = Buttons("Headline a concert", "Cost: 1,100", "Double your headliners' output", '+4 fans/sec', 'Cost: 11,000', 'headliner_cost', 'headliner', 'headliner_gain', 'headliner_upgrade_cost')
+headliner.pieces()
 
-tour = Buttons()
-tour.pieces("Go on a concert tour", "Cost: 1,100", "Double your tours' output", '+4 fans/sec', 'Cost: 11,000', 'tour_cost', 'tour', 'tour_gain', 'tour_upgrade_cost')
+tour = Buttons("Go on a concert tour", "Cost: 1,100", "Double your tours' output", '+4 fans/sec', 'Cost: 11,000', 'tour_cost', 'tour', 'tour_gain', 'tour_upgrade_cost')
+tour.pieces()
 
 #footer elements
 footer_frame = Frame(win, bg = bgcolor)
@@ -169,38 +184,14 @@ def update_displays():
     fans_per_sec_display.configure(text = break_point(data['fans_per_sec']) + ' total fans/sec')
     lyrics_gain_label.configure(text = '+' + break_point(data['lyrics']) + ' fans/click')
     lyrics_upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['lyrics_upgrade_cost']))
-    jingle.cost_display.configure(text = "Cost: " + break_point(data['jingle_cost']))
-    jingle.count.configure(text = 'Owned: ' + break_point(data['jingle']))
-    jingle.gain_label.configure(text = '+' + break_point(data['jingle_gain']) + ' fans/sec')
-    jingle.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['jingle_upgrade_cost']))
-    song.cost_display.configure(text = "Cost: " + break_point(data['song_cost']))
-    song.count.configure(text = 'Owned: ' + break_point(data['song']))
-    song.gain_label.configure(text = '+' + break_point(data['song_gain']) + ' fans/sec')
-    song.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['song_upgrade_cost']))
-    video.cost_display.configure(text = "Cost: " + break_point(data['video_cost']))
-    video.count.configure(text = 'Owned: ' + break_point(data['video']))
-    video.gain_label.configure(text = '+' + break_point(data['video_gain']) + ' fans/sec')
-    video.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['video_upgrade_cost']))
-    album.cost_display.configure(text = "Cost: " + break_point(data['album_cost']))
-    album.count.configure(text = 'Owned: ' + break_point(data['album']))
-    album.gain_label.configure(text = '+' + break_point(data['album_gain']) + ' fans/sec')
-    album.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['album_upgrade_cost']))
-    gig.cost_display.configure(text = "Cost: " + break_point(data['gig_cost']))
-    gig.count.configure(text = 'Owned: ' + break_point(data['gig']))
-    gig.gain_label.configure(text = '+' + break_point(data['gig_gain']) + ' fans/sec')
-    gig.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['gig_upgrade_cost']))
-    festival.cost_display.configure(text = "Cost: " + break_point(data['festival_cost']))
-    festival.count.configure(text = 'Owned: ' + break_point(data['festival']))
-    festival.gain_label.configure(text = '+' + break_point(data['festival_gain']) + ' fans/sec')
-    festival.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['festival_upgrade_cost']))
-    headliner.cost_display.configure(text = "Cost: " + break_point(data['headliner_cost']))
-    headliner.count.configure(text = 'Owned: ' + break_point(data['headliner']))
-    headliner.gain_label.configure(text = '+' + break_point(data['headliner_gain']) + ' fans/sec')
-    headliner.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['headliner_upgrade_cost']))
-    tour.cost_display.configure(text = "Cost: " + break_point(data['tour_cost']))
-    tour.count.configure(text = 'Owned: ' + break_point(data['tour']))
-    tour.gain_label.configure(text = '+' + break_point(data['tour_gain']) + ' fans/sec')
-    tour.upgrade_cost_label.configure(text = 'Cost: ' + break_point(data['tour_upgrade_cost']))
+    jingle.update()
+    song.update()
+    video.update()
+    album.update()
+    gig.update()
+    festival.update()
+    headliner.update()
+    tour.update()
     multiplier_label.configure(text = str(data['prestige']) + ' hits!')
 
 #prestige system    
