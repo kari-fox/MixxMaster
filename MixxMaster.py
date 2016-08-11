@@ -34,6 +34,7 @@ lyrics_upgrade_button = Button(lyrics_frame, text = "Double your lyrics' output"
 lyrics_gain_label = Label(lyrics_frame, text = '+1 fans/click', bg = bgcolor, fg = 'white', font = 'Helvetica')
 lyrics_upgrade_cost_label = Label(lyrics_frame, text = 'Cost: 100', bg = bgcolor, fg = 'white', font = 'Helvetica')
 
+#building elements
 class Buttons(object):
     def __init__(self, button_txt, cost_txt, upgrade_txt, gain_txt, upgrade_cost_txt, cost_data, name, gain_data, upgrade_data):
         self.button_txt = button_txt
